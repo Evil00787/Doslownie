@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:doslownie/logic/grid_cubit.dart';
+import 'package:doslownie/styles/theme.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,20 +17,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-      ),
-      themeMode: ThemeMode.dark,
-      home: BlocProvider<GridCubit>(
-        create: (_) => GridCubit(Point<int>(5, 6)),
-        child: GamePage(),
-      ),
-    );
+    return DynamicColorBuilder(
+        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+      return MaterialApp(
+        title: 'Flutter Demo',
+        theme: CustomTheme().getLightTheme(lightDynamic),
+        darkTheme: CustomTheme().getDarkTheme(darkDynamic),
+        themeMode: ThemeMode.system,
+        home: BlocProvider<GridCubit>(
+          create: (_) => GridCubit(Point<int>(5, 6)),
+          child: GamePage(),
+        ),
+      );
+    });
   }
 }

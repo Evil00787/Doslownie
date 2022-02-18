@@ -49,7 +49,7 @@ class _GamePageState extends State<GamePage> {
         height: 50,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: Colors.blueGrey,
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           child: Center(
@@ -57,7 +57,7 @@ class _GamePageState extends State<GamePage> {
               letter,
               style: TextStyle(
                 fontSize: 25,
-                color: Colors.black54,
+                color: Theme.of(context).colorScheme.background,
                 fontWeight: FontWeight.bold,
               ),
             ),
