@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: CustomTheme().getLightTheme(lightDynamic),
         darkTheme: CustomTheme().getDarkTheme(darkDynamic),
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.dark,
         home: BlocProvider<GridCubit>(
           create: (_) => GridCubit(Point<int>(5, 6)),
           child: GamePage(),
