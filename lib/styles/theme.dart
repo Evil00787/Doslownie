@@ -1,4 +1,3 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTheme {
@@ -7,13 +6,10 @@ class CustomTheme {
   ThemeData getLightTheme(ColorScheme? lightDynamic) {
     ColorScheme colorScheme = const ColorScheme.light();
     if (lightDynamic != null) {
-      colorScheme = colorScheme.copyWith(
-        primary: lightDynamic.primary,
-      );
-      colorScheme = colorScheme.harmonized();
+      colorScheme = lightDynamic;
     } else {
       colorScheme = colorScheme.copyWith(
-        primary: Colors.blueGrey,
+        primary: Colors.blueGrey, surfaceVariant: Colors.grey, surface: Colors.white
       );
     }
     return ThemeData(
@@ -24,14 +20,10 @@ class CustomTheme {
   ThemeData getDarkTheme(ColorScheme? darkDynamic) {
     ColorScheme darkColorScheme = const ColorScheme.dark();
     if (darkDynamic != null) {
-      darkColorScheme = darkColorScheme.copyWith(
-        primary: darkDynamic.primary,
-      );
-
-      darkColorScheme = darkColorScheme.harmonized();
+      darkColorScheme = darkDynamic;
     } else {
       darkColorScheme = darkColorScheme.copyWith(
-        primary: Colors.blueGrey,
+        primary: Colors.blueGrey, surfaceVariant: Colors.black12, surface: Colors.black26
       );
     }
     return ThemeData(
