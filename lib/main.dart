@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:doslownie/logic/grid_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'game_page.dart';
 
@@ -23,7 +25,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       themeMode: ThemeMode.dark,
-      home: GamePage(dimensions: Point<int>(5, 6)),
+      home: BlocProvider<GridCubit>(
+        create: (_) => GridCubit(Point<int>(5, 6)),
+        child: GamePage(),
+      ),
     );
   }
 }
