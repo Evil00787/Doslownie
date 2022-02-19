@@ -1,3 +1,4 @@
+import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,18 +14,11 @@ class KeyboardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: letter == "✔" ? Theme.of(context).colorScheme.primary :
-            letter == "⌫" ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.surfaceVariant,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-          ),
-          onPressed: () {
+        padding: const EdgeInsets.all(4.0),
+        child: ExpandTapWidget(
+          tapPadding: const EdgeInsets.all(4.0),
+          onTap: () {
             var cubit = context.read<GridCubit>();
-
             if (letter == "✔") {
               cubit.confirm();
               HapticFeedback.lightImpact();
@@ -36,16 +30,39 @@ class KeyboardButton extends StatelessWidget {
               HapticFeedback.heavyImpact();
             }
           },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Text(
-              letter,
-              style: TextStyle(
-                fontSize: 25,
-                color: letter == "✔" ? Theme.of(context).colorScheme.onPrimary :
-                letter == "⌫" ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).colorScheme.onSurfaceVariant,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              tapTargetSize: MaterialTapTargetSize.padded,
+              primary: letter == "✔" ? Theme.of(context).colorScheme.primary :
+              letter == "⌫" ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.surfaceVariant,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
               ),
-              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              var cubit = context.read<GridCubit>();
+              if (letter == "✔") {
+                cubit.confirm();
+                HapticFeedback.lightImpact();
+              } else if (letter == "⌫") {
+                cubit.clear();
+                HapticFeedback.mediumImpact();
+              } else {
+                cubit.letter(letter.toUpperCase());
+                HapticFeedback.heavyImpact();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                letter,
+                style: TextStyle(
+                  fontSize: 25,
+                  color: letter == "✔" ? Theme.of(context).colorScheme.onPrimary :
+                  letter == "⌫" ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ),
