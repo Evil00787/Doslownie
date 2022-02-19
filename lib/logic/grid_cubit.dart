@@ -39,7 +39,7 @@ class GridCubit extends Cubit<GridState> {
     if (state.state != GameState.ongoing) return;
     if (pointer.x < state.dimensions.x) return;
     var input = state.letters[pointer.y].tiles.map((e) => e.letter).join('');
-    if (!_wordRepository.isValidWord(input)) {
+    if (!_wordRepository.isValidWord(input, state.dimensions.x)) {
       emit(state.copyWith(message: 'Not a valid word'));
       return;
     }
@@ -99,7 +99,7 @@ class GridCubit extends Cubit<GridState> {
   }
 
   void _drawWord() {
-    _word = _wordRepository.getRandomWord();
+    _word = _wordRepository.getRandomWord(state.dimensions.x);
     print('Chosen word: $_word');
   }
 

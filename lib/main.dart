@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.dark,
         home: MultiBlocProvider(providers: [
           BlocProvider<KeyboardCubit>(lazy: true, create: (_) => KeyboardCubit()),
-          BlocProvider<GridCubit>(lazy: true, create: (context) => GridCubit(Point<int>(5, 6), BlocProvider.of<KeyboardCubit>(context))),
+          BlocProvider<GridCubit>(lazy: true, create: (context) => GridCubit(Point<int>(6, 6), BlocProvider.of<KeyboardCubit>(context))),
         ], child: GamePage()),
       );
     });

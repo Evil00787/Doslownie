@@ -67,7 +67,10 @@ class GamePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AppBar(title: Center(child: Text("Dosłownie")), backgroundColor: Theme.of(context).colorScheme.primaryContainer,),
+            AppBar(
+              title: Center(child: Text("Dosłownie")),
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -105,13 +108,7 @@ class GamePage extends StatelessWidget {
       margin: EdgeInsets.all(4),
       dismissDirection: FlushbarDismissDirection.HORIZONTAL,
       borderRadius: BorderRadius.circular(8),
-      icon: icon != null
-          ? Icon(
-              icon,
-              size: 28.0,
-              color: accentColor,
-            )
-          : null,
+      icon: icon != null ? Icon(icon, size: 28.0, color: accentColor) : null,
       mainButton: button != null
           ? TextButton(
               onPressed: () {
@@ -133,8 +130,8 @@ class GamePage extends StatelessWidget {
     var cubit = context.read<GridCubit>();
     if (event is RawKeyDownEvent) {
       var letter = event.character;
-      if (letter != null &&
-          RegExp(r'[a-zA-ZąćęłóśńżźĄĆĘŁÓŚŃŻŹ]').hasMatch(letter)) {
+      var pattern = r'[a-zA-ZąćęłóśńżźĄĆĘŁÓŚŃŻŹ]';
+      if (letter != null && RegExp(pattern).hasMatch(letter)) {
         cubit.letter(letter.toUpperCase());
       } else if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
         cubit.confirm();
