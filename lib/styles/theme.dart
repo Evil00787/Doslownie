@@ -21,7 +21,7 @@ class CustomTheme {
       colorScheme = lightDynamic;
     } else {
       colorScheme = colorScheme.copyWith(
-        primary: Colors.blueGrey, surfaceVariant: Colors.grey, surface: Colors.white, onSurfaceVariant: Colors.white
+        primary: Colors.blueGrey, onPrimary: Colors.white30, secondary: Colors.indigoAccent, onSecondary: Colors.white30, surfaceVariant: Colors.grey, surface: Colors.white, onSurfaceVariant: Colors.white,
       );
     }
     return ThemeData(
@@ -35,7 +35,7 @@ class CustomTheme {
       darkColorScheme = darkDynamic;
     } else {
       darkColorScheme = darkColorScheme.copyWith(
-        primary: Colors.blueGrey, surfaceVariant: Colors.white24, surface: Colors.black26, onSurfaceVariant: Colors.black26
+        primary: Colors.blueGrey, onPrimary: Colors.white30, secondary: Colors.indigoAccent, onSecondary: Colors.white30, surfaceVariant: Colors.white24, surface: Colors.black26, onSurfaceVariant: Colors.black26
       );
     }
     return ThemeData(
