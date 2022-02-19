@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:doslownie/logic/grid_cubit.dart';
+import 'package:doslownie/logic/keyboard_cubit.dart';
 import 'package:doslownie/styles/theme.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,10 @@ class MyApp extends StatelessWidget {
         theme: CustomTheme(context).getLightTheme(lightDynamic),
         darkTheme: CustomTheme(context).getDarkTheme(darkDynamic),
         themeMode: ThemeMode.dark,
-        home: BlocProvider<GridCubit>(
-          create: (_) => GridCubit(Point<int>(5, 6)),
-          child: GamePage(),
-        ),
+        home: MultiBlocProvider(providers: [
+          BlocProvider<KeyboardCubit>(lazy: true, create: (_) => KeyboardCubit()),
+          BlocProvider<GridCubit>(lazy: true, create: (context) => GridCubit(Point<int>(5, 6), BlocProvider.of<KeyboardCubit>(context))),
+        ], child: GamePage()),
       );
     });
   }

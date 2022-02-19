@@ -1,11 +1,11 @@
+import 'widgets/keyboard_widget.dart';
+import 'widgets/letter_cell.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'logic/grid_cubit.dart';
-import 'widgets/keyboard.dart';
-import 'widgets/letter_cell.dart';
 
 class GamePage extends StatelessWidget {
   final _focusNode = FocusNode();
@@ -83,7 +83,7 @@ class GamePage extends StatelessWidget {
                   )
               ],
             ),
-            KeyboardWidget(state)
+            KeyboardWidget()
           ],
         ),
       ),

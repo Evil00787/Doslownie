@@ -1,3 +1,5 @@
+import 'package:doslownie/models/grid.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTheme {
@@ -38,5 +40,33 @@ class CustomTheme {
     return ThemeData(
       colorScheme: darkColorScheme, useMaterial3: true, fontFamily: "RobotoMono"
     );
+  }
+}
+
+extension TileColor on TileValidation {
+  Color color(context, {bool isKeyboard = false}) {
+    switch (this) {
+      case TileValidation.incorrect:
+        return isKeyboard ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(40) : Theme.of(context).colorScheme.surfaceVariant;
+      case TileValidation.moved:
+        return Colors.yellow.harmonizeWith(Theme.of(context).colorScheme.primary).withAlpha(160);
+      case TileValidation.correct:
+        return Colors.green.harmonizeWith(Theme.of(context).colorScheme.primary).withAlpha(160);
+      case TileValidation.unknown:
+        return Theme.of(context).colorScheme.surfaceVariant;
+    }
+  }
+
+  Color onColor(context) {
+    switch (this) {
+      case TileValidation.incorrect:
+        return Theme.of(context).colorScheme.onSurfaceVariant;
+      case TileValidation.moved:
+        return Theme.of(context).colorScheme.onSurfaceVariant;
+      case TileValidation.correct:
+        return Theme.of(context).colorScheme.onSurfaceVariant;
+      case TileValidation.unknown:
+        return Theme.of(context).colorScheme.onSurfaceVariant;
+    }
   }
 }

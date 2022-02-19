@@ -18,5 +18,5 @@ class WordRepository {
 
   String getRandomWord() => _words[Random().nextInt(_words.length)];
 
-  bool isValidWord(String word) => _words.contains(word);
+  bool isValidWord(String word) => true;//_words.contains(word);
 }

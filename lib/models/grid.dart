@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum TileValidation { incorrect, moved, correct }
+enum TileValidation { incorrect, moved, correct, unknown }
 
 class Tile extends Equatable {
   final String letter;

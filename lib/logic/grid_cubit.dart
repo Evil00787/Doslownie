@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:doslownie/logic/keyboard_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 import '../models/grid.dart';
@@ -10,10 +11,11 @@ part 'grid_state.dart';
 
 class GridCubit extends Cubit<GridState> {
   var pointer = Point<int>(0, 0);
+  final KeyboardCubit keyboardCubit;
   final _wordRepository = WordRepository();
   late String _word;
 
-  GridCubit(Point<int> dimensions)
+  GridCubit(Point<int> dimensions, this.keyboardCubit)
       : super(GridState(
           letters: _createTiles(dimensions),
           dimensions: dimensions,
@@ -28,7 +30,7 @@ class GridCubit extends Cubit<GridState> {
     var gameEnded = pointer.y == state.dimensions.y;
     if (gameEnded || pointer.x == state.dimensions.x) return;
     var data = _copyTiles();
-    data[pointer.y].tiles[pointer.x] = Tile(letter: letter);
+    data[pointer.y].tiles[pointer.x] = Tile(letter: letter.toUpperCase());
     emit(state.copyWith(letters: data));
     pointer = Point<int>(pointer.x + 1, pointer.y);
   }
@@ -50,6 +52,7 @@ class GridCubit extends Cubit<GridState> {
       validation: validation,
       state: TileRowState.completed,
     );
+    keyboardCubit.colorKeyboardKeys(data[pointer.y].tiles);
     if (pointer.y < state.dimensions.y - 1) {
       pointer = Point<int>(0, pointer.y + 1);
       data[pointer.y] = data[pointer.y].copyWith(state: TileRowState.active);
