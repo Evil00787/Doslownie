@@ -53,11 +53,13 @@ class GridCubit extends Cubit<GridState> {
       state: TileRowState.completed,
     );
     keyboardCubit.colorKeyboardKeys(data[pointer.y].tiles);
-    if (pointer.y < state.dimensions.y - 1) {
-      pointer = Point<int>(0, pointer.y + 1);
-      data[pointer.y] = data[pointer.y].copyWith(state: TileRowState.active);
-    } else if (!rowCorrect) {
-      newState = GameState.lost;
+    if (!rowCorrect) {
+      if (pointer.y < state.dimensions.y - 1) {
+        pointer = Point<int>(0, pointer.y + 1);
+        data[pointer.y] = data[pointer.y].copyWith(state: TileRowState.active);
+      } else {
+        newState = GameState.lost;
+      }
     }
     emit(state.copyWith(letters: data, state: newState));
   }
