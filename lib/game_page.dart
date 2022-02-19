@@ -9,6 +9,7 @@ import 'widgets/letter_cell.dart';
 
 class GamePage extends StatelessWidget {
   final _focusNode = FocusNode();
+  Flushbar? _flushbar;
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +27,17 @@ class GamePage extends StatelessWidget {
   Widget _blocWrapper(BlocWidgetBuilder<GridState> builder) {
     return BlocListener<GridCubit, GridState>(
       listener: (context, state) {
+        if (state.state == null) return;
         _showFlushbar(
-          message: state.state.message,
+          message: state.state!.message,
           context: context,
-          icon: state.state.icon,
+          icon: state.state!.icon,
+          button: state.state == GameState.initial
+              ? Button(
+                  'Begin',
+                  () => context.read<GridCubit>().startGame(),
+                )
+              : null,
         );
       },
       listenWhen: (oldState, newState) => oldState.state != newState.state,
@@ -81,10 +89,11 @@ class GamePage extends StatelessWidget {
     required String message,
     required BuildContext context,
     IconData? icon,
+    Button? button,
   }) {
-    Flushbar(
+    _flushbar = Flushbar(
       message: message,
-      duration: Duration(seconds: 5),
+      duration: button == null ? Duration(seconds: 5) : null,
       margin: EdgeInsets.all(8),
       borderRadius: BorderRadius.circular(8),
       icon: icon != null
@@ -94,8 +103,15 @@ class GamePage extends StatelessWidget {
               color: Theme.of(context).colorScheme.secondary,
             )
           : null,
+      mainButton: button != null ? TextButton(
+        onPressed: () {
+          _flushbar?.dismiss();
+          button.action();
+        },
+        child: Text(button.text),
+      ) : null,
       leftBarIndicatorColor: Theme.of(context).colorScheme.secondary,
-    ).show(context);
+    )..show(context);
   }
 
   void _onKeyEvent(RawKeyEvent event, BuildContext context) {
@@ -128,4 +144,11 @@ extension GameStateMessage on GameState {
         GameState.won: Icons.emoji_events_rounded,
         GameState.lost: Icons.clear_rounded,
       }[this]!;
+}
+
+class Button {
+  final String text;
+  final void Function() action;
+
+  Button(this.text, this.action);
 }

@@ -26,11 +26,13 @@ class GridCubit extends Cubit<GridState> {
         )) {
     _wordRepository.ready.then((_) {
       _word = _wordRepository.getRandomWord();
+      emit(state.copyWith(state: GameState.initial));
       print('Chosen word: $_word');
     });
   }
 
   void letter(String letter) async {
+    if (state.state != GameState.ongoing) return;
     await _wordRepository.ready;
     var gameEnded = pointer.y == state.dimensions.y;
     if (gameEnded || pointer.x == state.dimensions.x) return;
@@ -41,7 +43,7 @@ class GridCubit extends Cubit<GridState> {
   }
 
   void confirm() {
-    var gameFinished = pointer.y == state.dimensions.y - 1;
+    if (state.state != GameState.ongoing) return;
     if (pointer.x < state.dimensions.x) return;
     var input = state.letters[pointer.y].tiles.map((e) => e.letter).join('');
     if (!_wordRepository.isValidWord(input)) {
@@ -57,7 +59,7 @@ class GridCubit extends Cubit<GridState> {
       validation: validation,
       state: TileRowState.completed,
     );
-    if (!gameFinished) {
+    if (pointer.y < state.dimensions.y - 1) {
       pointer = Point<int>(0, pointer.y + 1);
       data[pointer.y] = data[pointer.y].copyWith(state: TileRowState.active);
     } else if (!rowCorrect) {
@@ -81,11 +83,16 @@ class GridCubit extends Cubit<GridState> {
   }
 
   void clear() {
-    if (pointer.x == 0) return;
+    if (pointer.x == 0 || state.state != GameState.ongoing) return;
     pointer = Point<int>(pointer.x - 1, pointer.y);
     var data = _copyLetters();
     data[pointer.y].tiles[pointer.x] = Tile(letter: '');
     emit(state.copyWith(letters: data));
+  }
+
+  void startGame() {
+    if (state.state != GameState.initial) return;
+    emit(state.copyWith(state: GameState.ongoing));
   }
 
   List<TileRow> _copyLetters() {

@@ -6,13 +6,13 @@ class GridState extends Equatable {
   final Point<int> dimensions;
   final List<TileRow> letters;
   final String? message;
-  final GameState state;
+  final GameState? state;
 
   GridState({
     required this.letters,
     required this.dimensions,
     this.message,
-    this.state = GameState.initial,
+    this.state,
   });
 
   GridState copyWith({
@@ -29,5 +29,5 @@ class GridState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [letters, message];
+  List<Object?> get props => [letters, message, state];
 }
