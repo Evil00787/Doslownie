@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<GridCubit>(
             lazy: true,
             create: (context) => GridCubit(
-              Point<int>(6, 6),
+              Point<int>(5, 6),
               BlocProvider.of<KeyboardCubit>(context),
             ),
           ),

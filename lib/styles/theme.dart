@@ -34,7 +34,8 @@ class CustomTheme {
       darkColorScheme = darkDynamic;
     } else {
       darkColorScheme = darkColorScheme.copyWith(
-        primary: Colors.blueGrey, onPrimary: Colors.white54, secondary: Colors.indigoAccent, onSecondary: Colors.white60, surfaceVariant: Colors.white24, surface: Colors.black26, onSurfaceVariant: Colors.white60
+        primary: Colors.indigoAccent, onPrimary: Colors.white60, secondary: Colors.blueGrey, onSecondary: Colors.white54, surfaceVariant: Colors.white24, surface: Colors.black26, onSurfaceVariant: Colors.white60,
+        primaryContainer: Colors.indigoAccent.withAlpha(120)
       );
     }
     return ThemeData(
@@ -47,7 +48,7 @@ extension TileColor on TileValidation {
   Color color(context, {bool isKeyboard = false}) {
     switch (this) {
       case TileValidation.incorrect:
-        return isKeyboard ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(80) : Theme.of(context).colorScheme.surfaceVariant.withAlpha(120);
+        return isKeyboard ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(120) : Theme.of(context).colorScheme.surfaceVariant.withAlpha(120);
       case TileValidation.moved:
         return Colors.yellow.harmonizeWith(Theme.of(context).colorScheme.primary).withAlpha(160);
       case TileValidation.correct:

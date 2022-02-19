@@ -1,3 +1,5 @@
+import 'package:doslownie/widgets/end_game_dialog.dart';
+
 import 'widgets/keyboard_widget.dart';
 import 'widgets/letter_cell.dart';
 import 'package:another_flushbar/flushbar.dart';
@@ -10,6 +12,7 @@ import 'logic/grid_cubit.dart';
 class GamePage extends StatelessWidget {
   final _focusNode = FocusNode();
   Flushbar? _flushbar;
+  EndGameDialog? endGameDialog;
 
   @override
   Widget build(BuildContext context) {
@@ -28,22 +31,20 @@ class GamePage extends StatelessWidget {
     return BlocListener<GridCubit, GridState>(
       listener: (context, state) {
         if (state.state == null) return;
-        Button? button;
         if (state.state == GameState.initial) {
-          button = Button('Begin', () => context.read<GridCubit>().startGame());
-        }
-        if (state.state == GameState.won || state.state == GameState.lost) {
-          button = Button(
-            'Play again',
-            () => context.read<GridCubit>().restartGame(),
+          _showFlushbar(
+            message: state.state!.message,
+            context: context,
+            icon: state.state!.icon,
+            button: Button('Begin', () => context.read<GridCubit>().startGame()),
           );
         }
-        _showFlushbar(
-          message: state.state!.message,
-          context: context,
-          icon: state.state!.icon,
-          button: button,
-        );
+        if (state.state == GameState.won || state.state == GameState.lost) {
+          var cubit = context.read<GridCubit>();
+          _setupEndGameDialog(state.state!, () => cubit.restartGame(), cubit.word);
+          _showEndGameDialog(context);
+        }
+
       },
       listenWhen: (oldState, newState) => oldState.state != newState.state,
       child: BlocConsumer<GridCubit, GridState>(
@@ -70,6 +71,11 @@ class GamePage extends StatelessWidget {
             AppBar(
               title: Center(child: Text("Dosłownie")),
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              actions: [
+                state.state == GameState.won || state.state == GameState.lost ? IconButton(onPressed: () {
+                  _showEndGameDialog(context);
+                }, icon: Icon(Icons.restart_alt)) : SizedBox.shrink()
+              ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -124,6 +130,17 @@ class GamePage extends StatelessWidget {
           : null,
       leftBarIndicatorColor: accentColor,
     )..show(context);
+  }
+
+  Future<void> _showEndGameDialog(context) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => endGameDialog!);
+  }
+
+  void _setupEndGameDialog(GameState state, void Function() newGameFun, String hiddenWord) {
+    endGameDialog = EndGameDialog(gameState: state, startNewGame: () => newGameFun(), hiddenWord: hiddenWord);
   }
 
   void _onKeyEvent(RawKeyEvent event, BuildContext context) {

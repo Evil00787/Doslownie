@@ -13,7 +13,7 @@ class GridCubit extends Cubit<GridState> {
   var pointer = Point<int>(0, 0);
   final KeyboardCubit keyboardCubit;
   final _wordRepository = WordRepository();
-  late String _word;
+  late String word;
 
   GridCubit(Point<int> dimensions, this.keyboardCubit)
       : super(GridState(
@@ -68,10 +68,10 @@ class GridCubit extends Cubit<GridState> {
     var result = <TileValidation>[];
     for (var i = 0; i < state.dimensions.x; i++) {
       var letter = state.letters[pointer.y].tiles[i].letter;
-      if (!_word.contains(letter)) {
+      if (!word.contains(letter)) {
         result.add(TileValidation.incorrect);
       } else {
-        var placeMatch = _word[i] == letter;
+        var placeMatch = word[i] == letter;
         result.add(placeMatch ? TileValidation.correct : TileValidation.moved);
       }
     }
@@ -101,8 +101,8 @@ class GridCubit extends Cubit<GridState> {
   }
 
   void _drawWord() {
-    _word = _wordRepository.getRandomWord(state.dimensions.x);
-    print('Chosen word: $_word');
+    word = _wordRepository.getRandomWord(state.dimensions.x);
+    print('Chosen word: $word');
   }
 
   List<TileRow> _copyTiles() => [
