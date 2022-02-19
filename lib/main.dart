@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
       return MaterialApp(
         title: 'Flutter Demo',
-        theme: CustomTheme().getLightTheme(lightDynamic),
-        darkTheme: CustomTheme().getDarkTheme(darkDynamic),
+        theme: CustomTheme(context).getLightTheme(lightDynamic),
+        darkTheme: CustomTheme(context).getDarkTheme(darkDynamic),
         themeMode: ThemeMode.dark,
         home: BlocProvider<GridCubit>(
           create: (_) => GridCubit(Point<int>(5, 6)),

@@ -1,8 +1,9 @@
+import 'package:doslownie/logic/grid_cubit.dart';
 import 'package:doslownie/widgets/keyboard_button.dart';
 import 'package:flutter/material.dart';
 
 class KeyboardWidget extends StatelessWidget {
-  const KeyboardWidget({Key? key}) : super(key: key);
+  const KeyboardWidget(GridState state, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class KeyboardWidget extends StatelessWidget {
             children: [for (var a in "ASDFGHJKL".characters) KeyboardButton(a)]),
         Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [for (var a in "ZXCVBNM".characters) KeyboardButton(a)]),
+            children: [for (var a in "✔ZXCVBNM⌫".characters) KeyboardButton(a)]),
       ],
     );
   }

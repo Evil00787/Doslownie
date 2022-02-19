@@ -1,7 +1,19 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTheme {
-  CustomTheme();
+  dynamic context;
+
+  static final CustomTheme _customTheme = CustomTheme._internal();
+
+  CustomTheme._internal();
+
+  factory CustomTheme(context) {
+    _customTheme.context = context;
+    return _customTheme;
+  }
+
+
 
   ThemeData getLightTheme(ColorScheme? lightDynamic) {
     ColorScheme colorScheme = const ColorScheme.light();
@@ -9,7 +21,7 @@ class CustomTheme {
       colorScheme = lightDynamic;
     } else {
       colorScheme = colorScheme.copyWith(
-        primary: Colors.blueGrey, surfaceVariant: Colors.grey, surface: Colors.white
+        primary: Colors.blueGrey, surfaceVariant: Colors.grey, surface: Colors.white, onSurfaceVariant: Colors.white
       );
     }
     return ThemeData(
@@ -23,11 +35,19 @@ class CustomTheme {
       darkColorScheme = darkDynamic;
     } else {
       darkColorScheme = darkColorScheme.copyWith(
-        primary: Colors.blueGrey, surfaceVariant: Colors.black12, surface: Colors.black26
+        primary: Colors.blueGrey, surfaceVariant: Colors.white24, surface: Colors.black26, onSurfaceVariant: Colors.black26
       );
     }
     return ThemeData(
       colorScheme: darkColorScheme, useMaterial3: true, fontFamily: "RobotoMono"
     );
+  }
+
+  Color getDynamicGreen() {
+    return Colors.green.harmonizeWith(Theme.of(context).colorScheme.primary);
+  }
+
+  Color getDynamicRed() {
+    return Colors.red.harmonizeWith(Theme.of(context).colorScheme.primary);
   }
 }
