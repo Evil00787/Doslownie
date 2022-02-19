@@ -47,7 +47,7 @@ extension TileColor on TileValidation {
   Color color(context, {bool isKeyboard = false}) {
     switch (this) {
       case TileValidation.incorrect:
-        return isKeyboard ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(40) : Theme.of(context).colorScheme.surfaceVariant;
+        return isKeyboard ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(80) : Theme.of(context).colorScheme.surfaceVariant.withAlpha(120);
       case TileValidation.moved:
         return Colors.yellow.harmonizeWith(Theme.of(context).colorScheme.primary).withAlpha(160);
       case TileValidation.correct:

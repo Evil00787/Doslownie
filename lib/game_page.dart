@@ -18,7 +18,7 @@ class GamePage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: RawKeyboardListener(
         focusNode: _focusNode,
-        child: _blocWrapper((c, state) => _buildGrid(state)),
+        child: _blocWrapper((c, state) => _buildGrid(state, c)),
         onKey: (event) => _onKeyEvent(event, context),
       ),
     );
@@ -61,12 +61,13 @@ class GamePage extends StatelessWidget {
     );
   }
 
-  Center _buildGrid(GridState state) {
+  Center _buildGrid(GridState state, context) {
     return Center(
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            AppBar(title: Center(child: Text("Dosłownie")), backgroundColor: Theme.of(context).colorScheme.primaryContainer,),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -99,8 +100,10 @@ class GamePage extends StatelessWidget {
     var accentColor = Theme.of(context).colorScheme.secondary;
     _flushbar = Flushbar(
       message: message,
+      flushbarPosition: FlushbarPosition.TOP,
       duration: button == null ? Duration(seconds: 5) : null,
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.all(4),
+      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
       borderRadius: BorderRadius.circular(8),
       icon: icon != null
           ? Icon(
