@@ -6,7 +6,11 @@ class LetterCell extends StatelessWidget {
   final Tile tile;
   final TileRowState state;
 
-  const LetterCell(this.tile, this.state, {Key? key}) : super(key: key);
+  const LetterCell({
+    required this.tile,
+    required this.state,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +22,16 @@ class LetterCell extends StatelessWidget {
         height: 50,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: state != TileRowState.locked ? tile.validation?.color(primaryColor, context).withAlpha(160) ?? primaryColor : null,
+            color: state != TileRowState.locked
+                ? tile.validation
+                        ?.color(primaryColor, context)
+                        .withAlpha(160) ??
+                    primaryColor
+                : null,
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            border: state == TileRowState.locked ? Border.all(width: 4, color: primaryColor) : null,
+            border: state == TileRowState.locked
+                ? Border.all(width: 4, color: primaryColor)
+                : null,
           ),
           child: Center(
             child: Text(
@@ -40,7 +51,10 @@ class LetterCell extends StatelessWidget {
 
 extension TileColor on TileValidation {
   Color color(Color primary, context) {
-    if (this == TileValidation.incorrect) return Theme.of(context).colorScheme.surfaceVariant;
-    return this == TileValidation.correct ? Colors.green.harmonizeWith(primary) : Colors.yellow.harmonizeWith(primary);
+    if (this == TileValidation.incorrect)
+      return Theme.of(context).colorScheme.surfaceVariant;
+    return this == TileValidation.correct
+        ? Colors.green.harmonizeWith(primary)
+        : Colors.yellow.harmonizeWith(primary);
   }
 }

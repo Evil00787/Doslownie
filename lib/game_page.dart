@@ -21,23 +21,32 @@ class GamePage extends StatelessWidget {
           builder: (context, state) => Center(
             child: Center(
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [for (var y = 0; y < state.dimensions.y; y++)
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      for (var x = 0; x < state.dimensions.x; x++)
-                        LetterCell(state.letters[y].tiles[x], state.letters[y].state),
-                    ])
-                  ],
-                ),
-                KeyboardWidget(state)
-              ]),
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (var y = 0; y < state.dimensions.y; y++)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (var x = 0; x < state.dimensions.x; x++)
+                              LetterCell(
+                                tile: state.letters[y].tiles[x],
+                                state: state.letters[y].state,
+                              ),
+                          ],
+                        )
+                    ],
+                  ),
+                  KeyboardWidget(state)
+                ],
+              ),
             ),
           ),
         ),
         onKey: (event) => _onKeyEvent(event, context),
-      )
+      ),
     );
   }
 
