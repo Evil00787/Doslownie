@@ -14,6 +14,10 @@ class KeyboardCubit extends Cubit<KeyboardState> {
     }
     emit(state);
   }
+
+  void resetColors() {
+    emit(KeyboardState(state.keyboardLayout));
+  }
 }
 
 class KeyboardState {

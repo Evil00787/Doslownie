@@ -94,6 +94,7 @@ class GridCubit extends Cubit<GridState> {
     pointer = Point<int>(0, 0);
     _drawWord();
     var data = _createTiles(state.dimensions);
+    keyboardCubit.resetColors();
     emit(state.copyWith(state: GameState.ongoing, letters: data));
   }
 
