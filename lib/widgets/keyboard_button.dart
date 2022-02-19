@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../logic/grid_cubit.dart';
@@ -26,10 +27,13 @@ class KeyboardButton extends StatelessWidget {
 
             if (letter == "✔") {
               cubit.confirm();
+              HapticFeedback.lightImpact();
             } else if (letter == "⌫") {
               cubit.clear();
+              HapticFeedback.mediumImpact();
             } else {
               cubit.letter(letter.toUpperCase());
+              HapticFeedback.heavyImpact();
             }
           },
           child: Padding(

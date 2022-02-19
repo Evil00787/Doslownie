@@ -14,7 +14,9 @@ class MainActionButton extends StatelessWidget {
         onPressed: onPressed(),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-          child: Text(title),
+          child: Text(title, style: TextStyle(
+            fontSize: 24.0
+          ),),
         )
     );
   }
