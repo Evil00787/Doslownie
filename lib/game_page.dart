@@ -28,16 +28,21 @@ class GamePage extends StatelessWidget {
     return BlocListener<GridCubit, GridState>(
       listener: (context, state) {
         if (state.state == null) return;
+        Button? button;
+        if (state.state == GameState.initial) {
+          button = Button('Begin', () => context.read<GridCubit>().startGame());
+        }
+        if (state.state == GameState.won || state.state == GameState.lost) {
+          button = Button(
+            'Play again',
+            () => context.read<GridCubit>().restartGame(),
+          );
+        }
         _showFlushbar(
           message: state.state!.message,
           context: context,
           icon: state.state!.icon,
-          button: state.state == GameState.initial
-              ? Button(
-                  'Begin',
-                  () => context.read<GridCubit>().startGame(),
-                )
-              : null,
+          button: button,
         );
       },
       listenWhen: (oldState, newState) => oldState.state != newState.state,
@@ -91,6 +96,7 @@ class GamePage extends StatelessWidget {
     IconData? icon,
     Button? button,
   }) {
+    var accentColor = Theme.of(context).colorScheme.secondary;
     _flushbar = Flushbar(
       message: message,
       duration: button == null ? Duration(seconds: 5) : null,
@@ -100,17 +106,23 @@ class GamePage extends StatelessWidget {
           ? Icon(
               icon,
               size: 28.0,
-              color: Theme.of(context).colorScheme.secondary,
+              color: accentColor,
             )
           : null,
-      mainButton: button != null ? TextButton(
-        onPressed: () {
-          _flushbar?.dismiss();
-          button.action();
-        },
-        child: Text(button.text),
-      ) : null,
-      leftBarIndicatorColor: Theme.of(context).colorScheme.secondary,
+      mainButton: button != null
+          ? TextButton(
+              onPressed: () {
+                _flushbar?.dismiss();
+                button.action();
+              },
+              child: Text(button.text,
+                  style: TextStyle(
+                    color: accentColor,
+                    fontWeight: FontWeight.bold,
+                  )),
+            )
+          : null,
+      leftBarIndicatorColor: accentColor,
     )..show(context);
   }
 
@@ -120,7 +132,7 @@ class GamePage extends StatelessWidget {
       var letter = event.character;
       if (letter != null &&
           RegExp(r'[a-zA-ZąćęłóśńżźĄĆĘŁÓŚŃŻŹ]').hasMatch(letter)) {
-        cubit.letter(letter.toLowerCase());
+        cubit.letter(letter.toUpperCase());
       } else if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
         cubit.confirm();
       } else if (event.isKeyPressed(LogicalKeyboardKey.backspace)) {

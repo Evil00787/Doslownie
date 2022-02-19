@@ -15,20 +15,11 @@ class GridCubit extends Cubit<GridState> {
 
   GridCubit(Point<int> dimensions)
       : super(GridState(
-          letters: [
-            for (var y = 0; y < dimensions.y; y++)
-              TileRow(
-                tiles: List.filled(dimensions.x, Tile(letter: '')),
-                state: RowState.fromIndex(y, 0),
-              )
-          ],
+          letters: _createTiles(dimensions),
           dimensions: dimensions,
+          state: GameState.ongoing,
         )) {
-    _wordRepository.ready.then((_) {
-      _word = _wordRepository.getRandomWord();
-      emit(state.copyWith(state: GameState.initial));
-      print('Chosen word: $_word');
-    });
+    _wordRepository.ready.then((_) => _drawWord());
   }
 
   void letter(String letter) async {
@@ -36,7 +27,7 @@ class GridCubit extends Cubit<GridState> {
     await _wordRepository.ready;
     var gameEnded = pointer.y == state.dimensions.y;
     if (gameEnded || pointer.x == state.dimensions.x) return;
-    var data = _copyLetters();
+    var data = _copyTiles();
     data[pointer.y].tiles[pointer.x] = Tile(letter: letter);
     emit(state.copyWith(letters: data));
     pointer = Point<int>(pointer.x + 1, pointer.y);
@@ -50,7 +41,7 @@ class GridCubit extends Cubit<GridState> {
       emit(state.copyWith(message: 'Not a valid word'));
       return;
     }
-    var data = _copyLetters();
+    var data = _copyTiles();
     var validation = _verifyRow();
     var rowCorrect = validation.every((v) => v == TileValidation.correct);
     GameState? newState;
@@ -85,7 +76,7 @@ class GridCubit extends Cubit<GridState> {
   void clear() {
     if (pointer.x == 0 || state.state != GameState.ongoing) return;
     pointer = Point<int>(pointer.x - 1, pointer.y);
-    var data = _copyLetters();
+    var data = _copyTiles();
     data[pointer.y].tiles[pointer.x] = Tile(letter: '');
     emit(state.copyWith(letters: data));
   }
@@ -95,9 +86,28 @@ class GridCubit extends Cubit<GridState> {
     emit(state.copyWith(state: GameState.ongoing));
   }
 
-  List<TileRow> _copyLetters() {
-    return [
-      for (var y = 0; y < state.dimensions.y; y++) state.letters[y].copyWith()
-    ];
+  void restartGame() {
+    if (state.state != GameState.won && state.state != GameState.lost) return;
+    pointer = Point<int>(0, 0);
+    _drawWord();
+    var data = _createTiles(state.dimensions);
+    emit(state.copyWith(state: GameState.ongoing, letters: data));
   }
+
+  void _drawWord() {
+    _word = _wordRepository.getRandomWord();
+    print('Chosen word: $_word');
+  }
+
+  List<TileRow> _copyTiles() => [
+        for (var y = 0; y < state.dimensions.y; y++) state.letters[y].copyWith()
+      ];
+
+  static List<TileRow> _createTiles(Point<int> dimensions) => [
+        for (var y = 0; y < dimensions.y; y++)
+          TileRow(
+            tiles: List.filled(dimensions.x, Tile(letter: '')),
+            state: RowState.fromIndex(y, 0),
+          )
+      ];
 }

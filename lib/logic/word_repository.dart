@@ -11,7 +11,7 @@ class WordRepository {
 
   WordRepository() {
     rootBundle.loadString('assets/words.db').then((db) {
-      _words.addAll(db.split('\n'));
+      _words.addAll(db.split('\n').map((e) => e.toUpperCase()));
       _completer.complete();
     });
   }
