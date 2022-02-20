@@ -111,6 +111,7 @@ class GamePage extends StatelessWidget {
       message: message,
       flushbarPosition: FlushbarPosition.TOP,
       margin: EdgeInsets.all(4),
+      duration: Duration(seconds: 5),
       dismissDirection: FlushbarDismissDirection.HORIZONTAL,
       borderRadius: BorderRadius.circular(8),
       icon: icon != null ? Icon(icon, size: 28.0, color: accentColor) : null,

@@ -67,17 +67,30 @@ class GridCubit extends Cubit<GridState> {
   }
 
   List<TileState> _verifyRow() {
-    var result = <TileState>[];
-    for (var i = 0; i < state.dimensions.x; i++) {
+    var length = state.dimensions.x;
+    List<TileState?> result = List.filled(length, null);
+    List<bool> used = List.filled(length, false);
+    for (var i = 0; i < length; i++) {
       var letter = state.tiles[pointer.y][i].letter;
       if (!word.contains(letter)) {
-        result.add(TileState.incorrect);
-      } else {
-        var placeMatch = word[i] == letter;
-        result.add(placeMatch ? TileState.correct : TileState.moved);
+        result[i] = TileState.incorrect;
+      } else if (word[i] == letter) {
+        result[i] = TileState.correct;
+        used[i] = true;
       }
     }
-    return result;
+    for (var i = 0; i < length; i++) {
+      if (result[i] != null) continue;
+      for (var j = 0; j < length; j++) {
+        if (word[j] == state.tiles[pointer.y][i].letter && !used[j]) {
+          result[i] = TileState.moved;
+          used[j] = true;
+          break;
+        }
+      }
+      if (result[i] == null) result[i] = TileState.incorrect;
+    }
+    return result.cast<TileState>();
   }
 
   void clear() {
