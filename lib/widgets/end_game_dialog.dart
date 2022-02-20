@@ -1,9 +1,9 @@
-import 'package:doslownie/models/grid.dart';
-import 'package:doslownie/widgets/letter_cell.dart';
-import 'package:doslownie/widgets/main_action_button.dart';
 import 'package:flutter/material.dart';
 
-import '../logic/grid_cubit.dart';
+import '../models/game_state.dart';
+import '../models/grid.dart';
+import 'letter_cell.dart';
+import 'main_action_button.dart';
 
 class EndGameDialog extends StatelessWidget {
   final GameState gameState;

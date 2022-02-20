@@ -3,17 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:doslownie/styles/theme.dart';
 import '../logic/grid_cubit.dart';
 import '../models/grid.dart';
+import '../styles/theme.dart';
 
 class KeyboardButton extends StatelessWidget {
   final Tile tile;
+  final Duration animationTime;
+  Color? _currentColor;
 
   bool get isConfirm => tile.letter == "✔";
   bool get isBackspace => tile.letter == "⌫";
 
-  const KeyboardButton(this.tile, {Key? key}) : super(key: key);
+  KeyboardButton({
+    required this.tile,
+    this.animationTime = Duration.zero,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,55 +28,73 @@ class KeyboardButton extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: ExpandTapWidget(
           tapPadding: const EdgeInsets.all(4.0),
-          onTap: () {
-            var cubit = context.read<GridCubit>();
-            if (isConfirm) {
-              cubit.confirm();
-              HapticFeedback.lightImpact();
-            } else if (isBackspace) {
-              cubit.clear();
-              HapticFeedback.mediumImpact();
-            } else {
-              cubit.letter(tile.letter.toLowerCase());
-              HapticFeedback.heavyImpact();
-            }
-          },
+          onTap: () => _onTap(context),
           child: _buildButton(context),
         ),
       ),
     );
   }
 
-  ElevatedButton _buildButton(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        tapTargetSize: MaterialTapTargetSize.padded,
-        primary: isConfirm
-            ? Theme.of(context).colorScheme.primary
-            : isBackspace
-                ? Theme.of(context).colorScheme.secondary
-                : tile.state.color(context, isKeyboard: true),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+  void _onTap(BuildContext context) {
+    var cubit = context.read<GridCubit>();
+    if (isConfirm) {
+      cubit.confirm();
+      HapticFeedback.lightImpact();
+    } else if (isBackspace) {
+      cubit.clear();
+      HapticFeedback.mediumImpact();
+    } else {
+      cubit.letter(tile.letter.toLowerCase());
+      HapticFeedback.heavyImpact();
+    }
+  }
+
+  Color _buttonColor(BuildContext context) => isConfirm
+      ? Theme.of(context).colorScheme.primary
+      : isBackspace
+          ? Theme.of(context).colorScheme.secondary
+          : tile.state.color(context, isKeyboard: true);
+
+  Widget _buildButton(BuildContext context) {
+    var newColor = _buttonColor(context);
+    _currentColor ??= newColor;
+
+    return TweenAnimationBuilder<Color?>(
+      tween: ColorTween(
+        begin: _currentColor!,
+        end: newColor,
       ),
-      onPressed: () {
-        var cubit = context.read<GridCubit>();
-        if (isConfirm) {
-          cubit.confirm();
-          HapticFeedback.lightImpact();
-        } else if (isBackspace) {
-          cubit.clear();
-          HapticFeedback.mediumImpact();
-        } else {
-          cubit.letter(tile.letter.toLowerCase());
-          HapticFeedback.heavyImpact();
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        child: _buildSign(context),
+      curve: Curves.easeInOut,
+      onEnd: () => _currentColor = newColor,
+      duration: animationTime,
+      builder: (context, value, child) => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.padded,
+          primary: value,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+        ),
+        onPressed: () => _onPressed(context),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: _buildSign(context),
+        ),
       ),
     );
+  }
+
+  void _onPressed(BuildContext context) {
+    var cubit = context.read<GridCubit>();
+    if (isConfirm) {
+      cubit.confirm();
+      HapticFeedback.lightImpact();
+    } else if (isBackspace) {
+      cubit.clear();
+      HapticFeedback.mediumImpact();
+    } else {
+      cubit.letter(tile.letter.toLowerCase());
+      HapticFeedback.heavyImpact();
+    }
   }
 
   Widget _buildSign(BuildContext context) {

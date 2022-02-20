@@ -1,7 +1,5 @@
 part of 'grid_cubit.dart';
 
-enum GameState { initial, ongoing, won, lost }
-
 class GridState extends Equatable {
   final Point<int> dimensions;
   final List<List<Tile>> tiles;

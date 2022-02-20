@@ -1,6 +1,7 @@
-import 'package:doslownie/models/grid.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+
+import '../models/grid.dart';
 
 class CustomTheme {
   dynamic context;
@@ -58,7 +59,7 @@ class CustomTheme {
 }
 
 extension TileColor on TileState {
-  Color? color(context, {bool isKeyboard = false}) => {
+  Color color(context, {bool isKeyboard = false}) => {
         TileState.incorrect: isKeyboard
             ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(120)
             : Theme.of(context).colorScheme.surfaceVariant.withAlpha(120),
@@ -69,9 +70,9 @@ extension TileColor on TileState {
             .harmonizeWith(Theme.of(context).colorScheme.primary)
             .withAlpha(160),
         TileState.unknown: Theme.of(context).colorScheme.surfaceVariant,
-        TileState.locked: null,
+        TileState.locked: Colors.transparent,
         TileState.active: Theme.of(context).colorScheme.primary,
-      }[this];
+      }[this]!;
 
   Color onColor(context) {
     var colorScheme = Theme.of(context).colorScheme;

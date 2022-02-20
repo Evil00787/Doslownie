@@ -1,10 +1,11 @@
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
-import 'package:doslownie/logic/keyboard_cubit.dart';
 import 'package:equatable/equatable.dart';
 
+import '../models/game_state.dart';
 import '../models/grid.dart';
+import 'keyboard_cubit.dart';
 import 'word_repository.dart';
 
 part 'grid_state.dart';

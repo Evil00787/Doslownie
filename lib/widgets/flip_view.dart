@@ -18,8 +18,8 @@ class FlipView extends StatefulWidget {
     required this.animationController,
     AxisDirection? goBackDirection,
     AxisDirection? goFrontDirection,
-  })  : this.goBackDirection = goBackDirection ?? AxisDirection.left,
-        this.goFrontDirection = goFrontDirection ?? AxisDirection.left,
+  })  : goBackDirection = goBackDirection ?? AxisDirection.left,
+        goFrontDirection = goFrontDirection ?? AxisDirection.left,
         super(key: key);
 
   @override

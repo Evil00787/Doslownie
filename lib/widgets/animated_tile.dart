@@ -1,10 +1,8 @@
-import 'dart:math';
-
-import 'package:doslownie/widgets/letter_cell.dart';
 import 'package:flutter/material.dart';
 
 import '../models/grid.dart';
 import 'flip_view.dart';
+import 'letter_cell.dart';
 
 class AnimatedTile extends StatefulWidget {
   final Tile tile;
@@ -51,12 +49,12 @@ class _AnimatedTileState extends State<AnimatedTile>
     } else if (!widget.tile.state.uncovered && _animCtrl.value == 1) {
       Future.delayed(widget.delay, () => _animCtrl.reverse().then(_switchSides));
     } else {
-      _currentTile = _currentTile.copyWith(letter: widget.tile.letter);
+      _currentTile = widget.tile;
     }
     return FlipView(
       animationController: _curvedAnimation,
-      front: LetterCell(tile: _getTile(front: true)),
-      back: LetterCell(tile: _getTile(front: false)),
+      front: LetterCell(tile: _getTile(front: true), animationTime: widget.animationTime),
+      back: LetterCell(tile: _getTile(front: false), animationTime: widget.animationTime),
     );
   }
 
