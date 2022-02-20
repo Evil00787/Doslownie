@@ -49,7 +49,7 @@ class KeyboardButton extends StatelessWidget {
             ? Theme.of(context).colorScheme.primary
             : isBackspace
                 ? Theme.of(context).colorScheme.secondary
-                : tile.validation?.color(context, isKeyboard: true),
+                : tile.state.color(context, isKeyboard: true),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))),
       ),
@@ -86,7 +86,7 @@ class KeyboardButton extends StatelessWidget {
       tile.letter,
       style: TextStyle(
         fontSize: 25,
-        color: tile.validation?.onColor(context),
+        color: tile.state.onColor(context),
       ),
       textAlign: TextAlign.center,
     );

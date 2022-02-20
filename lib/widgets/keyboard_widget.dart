@@ -17,7 +17,7 @@ class KeyboardWidget extends StatelessWidget {
             for (var tileRow in state.tileRows)
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [for (var tile in tileRow.tiles) KeyboardButton(tile)]),
+                children: [for (var tile in tileRow) KeyboardButton(tile)]),
           ],
         ),
       ),

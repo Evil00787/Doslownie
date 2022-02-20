@@ -1,40 +1,53 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/grid.dart';
 
 class KeyboardCubit extends Cubit<KeyboardState> {
-  KeyboardCubit() : super(KeyboardState(["ĄĆĘŁÓŚŃŻŹ", "QWERTYUIOP", "ASDFGHJKL", "✔ZXCVBNM⌫"]));
-
-  void colorKeyboardKeys(List<Tile> tiles) {
-    for (var tile in tiles) {
-      var rowIndex = state.keyboardLayout.indexWhere((element) => element.contains(tile.letter));
-      var tileIndex = state.tileRows[rowIndex].tiles.indexWhere((element) => element.letter == tile.letter);
-      if(state.tileRows[rowIndex].tiles[tileIndex].validation != TileValidation.correct) state.tileRows[rowIndex].tiles[tileIndex] = tile;
-    }
-    emit(state);
-  }
-
-  void resetColors() {
-    emit(KeyboardState(state.keyboardLayout));
-  }
-}
-
-class KeyboardState {
-  final List<String> keyboardLayout;
-  late final List<TileRow> tileRows = [
-    for (var row in keyboardLayout)
-      TileRow(
-        tiles: [
-          for (var letter in row.characters)
-            Tile(letter: letter, validation: TileValidation.unknown)
-        ],
-        state: TileRowState.active
-      )
+  static const List<String> _letters = [
+    "ĄĆĘŁÓŚŃŻŹ",
+    "QWERTYUIOP",
+    "ASDFGHJKL",
+    "✔ZXCVBNM⌫",
   ];
 
-  KeyboardState(this.keyboardLayout);
+  KeyboardCubit() : super(KeyboardState(_tileRows()));
+
+  void colorKeyboardKeys(List<Tile> tiles) {
+    var newTiles = _tileRows(state.tileRows);
+    for (var tile in tiles) {
+      var rowIndex = _letters.indexWhere(
+        (element) => element.contains(tile.letter),
+      );
+      var tileIndex = state.tileRows[rowIndex].indexWhere(
+        (element) => element.letter == tile.letter,
+      );
+      if (state.tileRows[rowIndex][tileIndex].state !=
+          TileState.correct) {
+        newTiles[rowIndex][tileIndex] = tile;
+      }
+    }
+    emit(KeyboardState(newTiles));
+  }
+
+  void resetColors() => emit(KeyboardState(_tileRows()));
+
+  static List<List<Tile>> _tileRows([List<List<Tile>>? from]) => [
+        for (var i = 0; i < _letters.length; i++)
+          from?[i].copyWith() ??
+              _letters[i]
+                  .split('')
+                  .map((e) => Tile(letter: e, state: TileState.unknown))
+                  .toList(),
+      ];
+}
+
+class KeyboardState extends Equatable {
+  final List<List<Tile>> tileRows;
+
+  KeyboardState(this.tileRows);
 
   @override
-  List<Object?> get props => [keyboardLayout];
+  List<Object?> get props => [tileRows];
 }

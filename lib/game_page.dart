@@ -21,13 +21,13 @@ class GamePage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: RawKeyboardListener(
         focusNode: _focusNode,
-        child: _blocWrapper((c, state) => _buildGrid(state, c)),
+        child: _blocListeners(_buildGrid(context)),
         onKey: (event) => _onKeyEvent(event, context),
       ),
     );
   }
 
-  Widget _blocWrapper(BlocWidgetBuilder<GridState> builder) {
+  Widget _blocListeners(Widget child) {
     return BlocListener<GridCubit, GridState>(
       listener: (context, state) {
         if (state.state == null) return;
@@ -36,62 +36,71 @@ class GamePage extends StatelessWidget {
             message: state.state!.message,
             context: context,
             icon: state.state!.icon,
-            button: Button('Begin', () => context.read<GridCubit>().startGame()),
+            button: Button(
+              'Begin',
+              () => context.read<GridCubit>().startGame(),
+            ),
           );
         }
         if (state.state == GameState.won || state.state == GameState.lost) {
           var cubit = context.read<GridCubit>();
-          _setupEndGameDialog(state.state!, () => cubit.restartGame(), cubit.word);
+          _setupEndGameDialog(
+            state.state!,
+            () => cubit.restartGame(),
+            cubit.word,
+          );
           _showEndGameDialog(context);
         }
-
       },
       listenWhen: (oldState, newState) => oldState.state != newState.state,
-      child: BlocConsumer<GridCubit, GridState>(
-        listener: (context, state) {
-          if (state.message != null) {
-            _showFlushbar(
-              message: state.message!,
-              context: context,
-              icon: Icons.warning_rounded,
-            );
-          }
-        },
-        builder: (context, state) => builder(context, state),
+      child: BlocListener<GridCubit, GridState>(
+        listenWhen: (oldState, newState) => newState.message != null,
+        listener: (context, state) => _showFlushbar(
+          message: state.message!,
+          context: context,
+          icon: Icons.warning_rounded,
+        ),
+        child: child,
       ),
     );
   }
 
-  Center _buildGrid(GridState state, context) {
+  Center _buildGrid(BuildContext context) {
     return Center(
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AppBar(
-              title: Center(child: Text("Dosłownie")),
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              actions: [
-                state.state == GameState.won || state.state == GameState.lost ? IconButton(onPressed: () {
-                  _showEndGameDialog(context);
-                }, icon: Icon(Icons.restart_alt)) : SizedBox.shrink()
-              ],
+            BlocBuilder<GridCubit, GridState>(
+              buildWhen: (oldState, newState) =>
+                  oldState.state != newState.state,
+              builder: (context, state) => AppBar(
+                title: Center(child: Text("Dosłownie")),
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                actions: [
+                  state.state == GameState.won || state.state == GameState.lost
+                      ? IconButton(
+                          onPressed: () => _showEndGameDialog(context),
+                          icon: Icon(Icons.restart_alt),
+                        )
+                      : SizedBox.shrink(),
+                ],
+              ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (var y = 0; y < state.dimensions.y; y++)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (var x = 0; x < state.dimensions.x; x++)
-                        LetterCell(
-                          tile: state.letters[y].tiles[x],
-                          state: state.letters[y].state,
-                        ),
-                    ],
-                  )
-              ],
+            BlocBuilder<GridCubit, GridState>(
+              builder: (context, state) => Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (var y = 0; y < state.dimensions.y; y++)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (var x = 0; x < state.dimensions.x; x++)
+                          LetterCell(tile: state.tiles[y][x]),
+                      ],
+                    )
+                ],
+              ),
             ),
             KeyboardWidget()
           ],
@@ -121,11 +130,13 @@ class GamePage extends StatelessWidget {
                 _flushbar?.dismiss();
                 button.action();
               },
-              child: Text(button.text,
-                  style: TextStyle(
-                    color: accentColor,
-                    fontWeight: FontWeight.bold,
-                  )),
+              child: Text(
+                button.text,
+                style: TextStyle(
+                  color: accentColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             )
           : null,
       leftBarIndicatorColor: accentColor,
@@ -139,8 +150,12 @@ class GamePage extends StatelessWidget {
         builder: (context) => endGameDialog!);
   }
 
-  void _setupEndGameDialog(GameState state, void Function() newGameFun, String hiddenWord) {
-    endGameDialog = EndGameDialog(gameState: state, startNewGame: () => newGameFun(), hiddenWord: hiddenWord);
+  void _setupEndGameDialog(
+      GameState state, void Function() newGameFun, String hiddenWord) {
+    endGameDialog = EndGameDialog(
+        gameState: state,
+        startNewGame: () => newGameFun(),
+        hiddenWord: hiddenWord);
   }
 
   void _onKeyEvent(RawKeyEvent event, BuildContext context) {

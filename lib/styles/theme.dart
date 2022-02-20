@@ -20,12 +20,17 @@ class CustomTheme {
       colorScheme = lightDynamic;
     } else {
       colorScheme = colorScheme.copyWith(
-        primary: Colors.blueGrey, onPrimary: Colors.white54, secondary: Colors.indigoAccent, onSecondary: Colors.black54, surfaceVariant: Colors.grey, surface: Colors.white, onSurfaceVariant: Colors.black54,
+        primary: Colors.blueGrey,
+        onPrimary: Colors.white54,
+        secondary: Colors.indigoAccent,
+        onSecondary: Colors.black54,
+        surfaceVariant: Colors.grey,
+        surface: Colors.white,
+        onSurfaceVariant: Colors.black54,
       );
     }
     return ThemeData(
-      fontFamily: "RobotoMono", useMaterial3: true, colorScheme: colorScheme
-    );
+        fontFamily: "RobotoMono", useMaterial3: true, colorScheme: colorScheme);
   }
 
   ThemeData getDarkTheme(ColorScheme? darkDynamic) {
@@ -34,40 +39,43 @@ class CustomTheme {
       darkColorScheme = darkDynamic;
     } else {
       darkColorScheme = darkColorScheme.copyWith(
-        primary: Colors.indigoAccent, onPrimary: Colors.white60, secondary: Colors.blueGrey, onSecondary: Colors.white54, surfaceVariant: Colors.white24, surface: Colors.black26, onSurfaceVariant: Colors.white60,
-        primaryContainer: Colors.indigoAccent.withAlpha(120)
+        primary: Colors.indigoAccent,
+        onPrimary: Colors.white60,
+        secondary: Colors.blueGrey,
+        onSecondary: Colors.white54,
+        surfaceVariant: Colors.white24,
+        surface: Colors.black26,
+        onSurfaceVariant: Colors.white60,
+        primaryContainer: Colors.indigoAccent.withAlpha(120),
       );
     }
     return ThemeData(
-      colorScheme: darkColorScheme, useMaterial3: true, fontFamily: "RobotoMono"
+      colorScheme: darkColorScheme,
+      useMaterial3: true,
+      fontFamily: "RobotoMono",
     );
   }
 }
 
-extension TileColor on TileValidation {
-  Color color(context, {bool isKeyboard = false}) {
-    switch (this) {
-      case TileValidation.incorrect:
-        return isKeyboard ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(120) : Theme.of(context).colorScheme.surfaceVariant.withAlpha(120);
-      case TileValidation.moved:
-        return Colors.yellow.harmonizeWith(Theme.of(context).colorScheme.primary).withAlpha(160);
-      case TileValidation.correct:
-        return Colors.green.harmonizeWith(Theme.of(context).colorScheme.primary).withAlpha(160);
-      case TileValidation.unknown:
-        return Theme.of(context).colorScheme.surfaceVariant;
-    }
-  }
+extension TileColor on TileState {
+  Color? color(context, {bool isKeyboard = false}) => {
+        TileState.incorrect: isKeyboard
+            ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(120)
+            : Theme.of(context).colorScheme.surfaceVariant.withAlpha(120),
+        TileState.moved: Colors.yellow
+            .harmonizeWith(Theme.of(context).colorScheme.primary)
+            .withAlpha(160),
+        TileState.correct: Colors.green
+            .harmonizeWith(Theme.of(context).colorScheme.primary)
+            .withAlpha(160),
+        TileState.unknown: Theme.of(context).colorScheme.surfaceVariant,
+        TileState.locked: null,
+        TileState.active: Theme.of(context).colorScheme.primary,
+      }[this];
 
   Color onColor(context) {
-    switch (this) {
-      case TileValidation.incorrect:
-        return Theme.of(context).colorScheme.onSurfaceVariant;
-      case TileValidation.moved:
-        return Theme.of(context).colorScheme.onSurfaceVariant;
-      case TileValidation.correct:
-        return Theme.of(context).colorScheme.onSurfaceVariant;
-      case TileValidation.unknown:
-        return Theme.of(context).colorScheme.onSurfaceVariant;
-    }
+    var colorScheme = Theme.of(context).colorScheme;
+    if (this == TileState.active) return colorScheme.onPrimary;
+    return colorScheme.onSurfaceVariant;
   }
 }

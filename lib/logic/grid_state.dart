@@ -4,24 +4,24 @@ enum GameState { initial, ongoing, won, lost }
 
 class GridState extends Equatable {
   final Point<int> dimensions;
-  final List<TileRow> letters;
+  final List<List<Tile>> tiles;
   final String? message;
   final GameState? state;
 
   GridState({
-    required this.letters,
+    required this.tiles,
     required this.dimensions,
     this.message,
     this.state,
   });
 
   GridState copyWith({
-    List<TileRow>? letters,
+    List<List<Tile>>? tiles,
     String? message,
     GameState? state,
   }) {
     return GridState(
-      letters: letters ?? this.letters,
+      tiles: tiles ?? this.tiles,
       dimensions: dimensions,
       message: message,
       state: state ?? this.state,
@@ -29,5 +29,5 @@ class GridState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [letters, message, state];
+  List<Object?> get props => [tiles, message, state];
 }
