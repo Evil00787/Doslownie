@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:doslownie/widgets/animated_tile.dart';
 import 'package:doslownie/widgets/end_game_dialog.dart';
 
 import 'widgets/keyboard_widget.dart';
@@ -13,6 +16,9 @@ class GamePage extends StatelessWidget {
   final _focusNode = FocusNode();
   Flushbar? _flushbar;
   EndGameDialog? endGameDialog;
+
+  Duration tileDelay(int pos) => Duration(milliseconds: pos * 100);
+  Duration tileAnimation = Duration(seconds: 1);
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +102,11 @@ class GamePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         for (var x = 0; x < state.dimensions.x; x++)
-                          LetterCell(tile: state.tiles[y][x]),
+                          AnimatedTile(
+                            tile: state.tiles[y][x],
+                            delay: tileDelay(x),
+                            animationTime: tileAnimation,
+                          ),
                       ],
                     )
                 ],
@@ -134,7 +144,7 @@ class GamePage extends StatelessWidget {
                 button.text,
                 style: TextStyle(
                   color: accentColor,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             )
@@ -143,19 +153,27 @@ class GamePage extends StatelessWidget {
     )..show(context);
   }
 
-  Future<void> _showEndGameDialog(context) async {
-    return showDialog(
+  Future<void> _showEndGameDialog(BuildContext context) async {
+    var wordLength = context.read<GridCubit>().state.dimensions.x;
+    return Future.delayed(tileDelay(wordLength) + tileAnimation).then(
+      (value) => showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => endGameDialog!);
+        builder: (context) => endGameDialog!,
+      ),
+    );
   }
 
   void _setupEndGameDialog(
-      GameState state, void Function() newGameFun, String hiddenWord) {
+    GameState state,
+    void Function() newGameFun,
+    String hiddenWord,
+  ) {
     endGameDialog = EndGameDialog(
-        gameState: state,
-        startNewGame: () => newGameFun(),
-        hiddenWord: hiddenWord);
+      gameState: state,
+      startNewGame: () => newGameFun(),
+      hiddenWord: hiddenWord,
+    );
   }
 
   void _onKeyEvent(RawKeyEvent event, BuildContext context) {

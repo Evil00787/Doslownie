@@ -2,6 +2,10 @@ import 'package:equatable/equatable.dart';
 
 enum TileState { incorrect, moved, correct, unknown, active, locked }
 
+extension TileGroups on TileState {
+  bool get uncovered => [TileState.incorrect, TileState.moved, TileState.correct].contains(this);
+}
+
 class Tile extends Equatable {
   final String letter;
   final TileState state;
