@@ -70,34 +70,32 @@ class GamePage extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 800),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24.0, vertical: 16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        for (var y = 0; y < dimensions.y; y++)
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                for (var x = 0; x < dimensions.x; x++)
-                                  Expanded(
-                                    child: AnimatedTile(
-                                      tile: state.tiles[y][x],
-                                      delay: tileDelay(x + y),
-                                      animationTime: tileAnimation,
-                                    ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 800),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (var y = 0; y < dimensions.y; y++)
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (var x = 0; x < dimensions.x; x++)
+                                AspectRatio(
+                                  aspectRatio: 1,
+                                  child: AnimatedTile(
+                                    tile: state.tiles[y][x],
+                                    delay: tileDelay(x + y),
+                                    animationTime: tileAnimation,
                                   ),
-                              ],
-                            ),
-                          )
-                      ],
-                    ),
+                                ),
+                            ],
+                          ),
+                        )
+                    ],
                   ),
                 ),
               ),
