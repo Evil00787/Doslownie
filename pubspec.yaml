@@ -49,3 +49,4 @@ flutter:
     - i18n/pl_PL.json
     - assets/pl-PL.db
     - assets/en-US.db
+    - assets/riddle-pl-PL.db
