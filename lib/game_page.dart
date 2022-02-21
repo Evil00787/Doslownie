@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'logic/grid_cubit.dart';
+import 'logic/game_config_cubit.dart';
+import 'logic/grid/grid_cubit.dart';
 import 'models/game_state.dart';
 import 'widgets/animated_tile.dart';
 import 'widgets/end_game_dialog.dart';
@@ -11,8 +12,6 @@ import 'widgets/keyboard_widget.dart';
 
 class GamePage extends StatelessWidget {
   final _focusNode = FocusNode();
-  Flushbar? _flushbar;
-  EndGameDialog? endGameDialog;
 
   Duration tileDelay(int pos) => Duration(milliseconds: pos * 100);
   Duration tileAnimation = Duration(seconds: 1);
@@ -51,6 +50,7 @@ class GamePage extends StatelessWidget {
   }
 
   Center _buildGrid(BuildContext context) {
+    var dimensions = context.read<GameConfigCubit>().state.dimensions;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,14 +63,14 @@ class GamePage extends StatelessWidget {
             builder: (context, state) => Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                for (var y = 0; y < state.dimensions.y; y++)
+                for (var y = 0; y < dimensions.y; y++)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      for (var x = 0; x < state.dimensions.x; x++)
+                      for (var x = 0; x < dimensions.x; x++)
                         AnimatedTile(
                           tile: state.tiles[y][x],
-                          delay: tileDelay(x),
+                          delay: tileDelay(x + y),
                           animationTime: tileAnimation,
                         ),
                     ],
@@ -78,7 +78,7 @@ class GamePage extends StatelessWidget {
               ],
             ),
           ),
-          KeyboardWidget()
+          KeyboardWidget(),
         ],
       ),
     );
@@ -86,7 +86,7 @@ class GamePage extends StatelessWidget {
 
   void _showEndGameDialog(BuildContext context, GameState state) {
     var cubit = context.read<GridCubit>();
-    var wordLength = cubit.state.dimensions.x;
+    var wordLength = context.read<GameConfigCubit>().state.dimensions.x;
     Future.delayed(tileDelay(wordLength) + tileAnimation).then(
           (value) => showGeneralDialog(
         context: context,
@@ -107,7 +107,7 @@ class GamePage extends StatelessWidget {
     IconData? icon,
   }) {
     var accentColor = Theme.of(context).colorScheme.secondary;
-    _flushbar = Flushbar(
+    Flushbar(
       message: message,
       flushbarPosition: FlushbarPosition.TOP,
       margin: EdgeInsets.all(4),
@@ -116,15 +116,14 @@ class GamePage extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       icon: icon != null ? Icon(icon, size: 28.0, color: accentColor) : null,
       leftBarIndicatorColor: accentColor,
-    )..show(context);
+    ).show(context);
   }
 
   void _onKeyEvent(RawKeyEvent event, BuildContext context) {
     var cubit = context.read<GridCubit>();
     if (event is RawKeyDownEvent) {
       var letter = event.character;
-      var pattern = r'[a-zA-ZąćęłóśńżźĄĆĘŁÓŚŃŻŹ]';
-      if (letter != null && RegExp(pattern).hasMatch(letter)) {
+      if (letter != null) {
         cubit.letter(letter.toUpperCase());
       } else if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
         cubit.confirm();

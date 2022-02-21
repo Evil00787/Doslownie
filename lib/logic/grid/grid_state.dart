@@ -1,14 +1,12 @@
 part of 'grid_cubit.dart';
 
 class GridState extends Equatable {
-  final Point<int> dimensions;
   final List<List<Tile>> tiles;
   final String? message;
   final GameState? state;
 
   GridState({
     required this.tiles,
-    required this.dimensions,
     this.message,
     this.state,
   });
@@ -20,7 +18,6 @@ class GridState extends Equatable {
   }) {
     return GridState(
       tiles: tiles ?? this.tiles,
-      dimensions: dimensions,
       message: message,
       state: state ?? this.state,
     );

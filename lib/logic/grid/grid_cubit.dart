@@ -1,25 +1,30 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
 
-import '../models/game_state.dart';
-import '../models/grid.dart';
-import 'keyboard_cubit.dart';
-import 'word_repository.dart';
+import '../../models/game_state.dart';
+import '../../models/grid.dart';
+import '../game_config_cubit.dart';
+import '../keyboard_cubit.dart';
+import '../word_repository.dart';
 
 part 'grid_state.dart';
 
 class GridCubit extends Cubit<GridState> {
   var pointer = Point<int>(0, 0);
   final KeyboardCubit keyboardCubit;
-  final _wordRepository = WordRepository();
+  final GameConfigCubit gameConfigCubit;
+  final _wordRepository = GetIt.I<WordRepository>();
   late String word;
 
-  GridCubit(Point<int> dimensions, this.keyboardCubit)
+  Point<int> get dimensions => gameConfigCubit.state.dimensions;
+
+  GridCubit(this.gameConfigCubit, this.keyboardCubit)
       : super(GridState(
-          tiles: _createTiles(dimensions),
-          dimensions: dimensions,
+          tiles: _createTiles(gameConfigCubit.state.dimensions),
           state: GameState.ongoing,
         )) {
     _wordRepository.ready.then((_) => _drawWord());
@@ -28,8 +33,9 @@ class GridCubit extends Cubit<GridState> {
   void letter(String letter) async {
     if (state.state != GameState.ongoing) return;
     await _wordRepository.ready;
-    var gameEnded = pointer.y == state.dimensions.y;
-    if (gameEnded || pointer.x == state.dimensions.x) return;
+    if (!_wordRepository.isValidString(letter)) return;
+    var gameEnded = pointer.y == dimensions.y;
+    if (gameEnded || pointer.x == dimensions.x) return;
     var data = _copyTiles();
     data[pointer.y][pointer.x] = Tile(
       letter: letter.toUpperCase(),
@@ -41,9 +47,9 @@ class GridCubit extends Cubit<GridState> {
 
   void confirm() {
     if (state.state != GameState.ongoing) return;
-    if (pointer.x < state.dimensions.x) return;
+    if (pointer.x < dimensions.x) return;
     var input = state.tiles[pointer.y].map((e) => e.letter).join('');
-    if (!_wordRepository.isValidWord(input, state.dimensions.x)) {
+    if (!_wordRepository.isValidWord(input)) {
       emit(state.copyWith(message: 'Not a valid word'));
       return;
     }
@@ -55,9 +61,9 @@ class GridCubit extends Cubit<GridState> {
     data[pointer.y] = data[pointer.y].copyWith(states: validation);
     keyboardCubit.colorKeyboardKeys(data[pointer.y]);
     if (!rowCorrect) {
-      if (pointer.y < state.dimensions.y - 1) {
+      if (pointer.y < dimensions.y - 1) {
         pointer = Point<int>(0, pointer.y + 1);
-        var states = List.filled(state.dimensions.x, TileState.active);
+        var states = List.filled(dimensions.x, TileState.active);
         data[pointer.y] = data[pointer.y].copyWith(states: states);
       } else {
         newState = GameState.lost;
@@ -67,7 +73,7 @@ class GridCubit extends Cubit<GridState> {
   }
 
   List<TileState> _verifyRow() {
-    var length = state.dimensions.x;
+    var length = dimensions.x;
     List<TileState?> result = List.filled(length, null);
     List<bool> used = List.filled(length, false);
     for (var i = 0; i < length; i++) {
@@ -113,13 +119,13 @@ class GridCubit extends Cubit<GridState> {
     if (state.state != GameState.won && state.state != GameState.lost) return;
     pointer = Point<int>(0, 0);
     _drawWord();
-    var data = _createTiles(state.dimensions);
+    var data = _createTiles(dimensions);
     keyboardCubit.resetColors();
     emit(state.copyWith(state: GameState.ongoing, tiles: data));
   }
 
   void _drawWord() {
-    word = _wordRepository.getRandomWord(state.dimensions.x);
+    word = _wordRepository.getRandomWord();
     print('Chosen word: $word');
   }
 
