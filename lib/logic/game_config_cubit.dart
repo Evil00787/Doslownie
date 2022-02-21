@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 
-import 'word_repository.dart';
+import '../services/word_repository.dart';
 
 class GameConfigCubit extends Cubit<GameConfigState> {
   final _wordRepository = GetIt.I<WordRepository>();

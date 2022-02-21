@@ -4,6 +4,8 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart' show rootBundle;
 
+import 'app_locales.dart';
+
 class WordRepository {
   final _words = <Locale, Map<int, List<String>>>{};
   late Locale _locale;
@@ -21,11 +23,6 @@ class WordRepository {
   void setLocale(Locale locale) => _locale = locale;
   void setWordLength(int wordLength) => _wordLength = wordLength;
 
-  static List<Locale> supportedLocales = [
-    const Locale('en', 'US'),
-    const Locale('pl', 'PL'),
-  ];
-
   static final Map<Locale, RegExp> _validLetters = {
     Locale('en', 'US'): RegExp(r'^[a-zA-Z]*$'),
     Locale('pl', 'PL'): RegExp(r'^[a-zA-ZąćęłóśńżźĄĆĘŁÓŚŃŻŹ]*$'),
@@ -33,9 +30,9 @@ class WordRepository {
 
   WordRepository() {
     load(Locale e) => rootBundle.loadString('assets/${e.toLanguageTag()}.db');
-    Future.wait(supportedLocales.map(load)).then((value) {
-      for (var i = 0; i < supportedLocales.length; i++) {
-        _words[supportedLocales[i]] = _loadWords(value[i]);
+    Future.wait(AppLocalesDelegate.supportedLocales.map(load)).then((value) {
+      for (var i = 0; i < AppLocalesDelegate.supportedLocales.length; i++) {
+        _words[AppLocalesDelegate.supportedLocales[i]] = _loadWords(value[i]);
       }
       _completer.complete();
     });

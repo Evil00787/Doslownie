@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'logic/game_config_cubit.dart';
 import 'logic/grid/grid_cubit.dart';
 import 'models/game_state.dart';
+import 'services/app_locales.dart';
 import 'widgets/animated_tile.dart';
 import 'widgets/end_game_dialog.dart';
 import 'widgets/keyboard_widget.dart';
@@ -57,7 +58,7 @@ class GamePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppBar(
-              title: Center(child: Text("Dosłownie")),
+              title: Center(child: Text(AppLocales.I('title'))),
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               actions: [
                 state.state == GameState.won || state.state == GameState.lost
@@ -146,12 +147,12 @@ class GamePage extends StatelessWidget {
     var cubit = context.read<GridCubit>();
     if (event is RawKeyDownEvent) {
       var letter = event.character;
-      if (letter != null) {
-        cubit.letter(letter.toUpperCase());
-      } else if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
+      if (event.logicalKey == LogicalKeyboardKey.enter) {
         cubit.confirm();
-      } else if (event.isKeyPressed(LogicalKeyboardKey.backspace)) {
+      } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
         cubit.clear();
+      } else if (letter != null) {
+        cubit.letter(letter.toUpperCase());
       }
     }
   }

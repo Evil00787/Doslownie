@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -9,7 +8,7 @@ import '../../models/game_state.dart';
 import '../../models/grid.dart';
 import '../game_config_cubit.dart';
 import '../keyboard_cubit.dart';
-import '../word_repository.dart';
+import '../../services/word_repository.dart';
 
 part 'grid_state.dart';
 
