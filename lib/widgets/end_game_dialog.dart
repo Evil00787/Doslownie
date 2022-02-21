@@ -45,10 +45,13 @@ class EndGameDialog extends StatelessWidget {
                 children: [
                   for (var letter in hiddenWord.characters)
                     Expanded(
-                      child: LetterCell(
-                        tile: Tile(
-                          letter: letter,
-                          state: TileState.correct,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: LetterCell(
+                          tile: Tile(
+                            letter: letter,
+                            state: TileState.correct,
+                          ),
                         ),
                       ),
                     ),
