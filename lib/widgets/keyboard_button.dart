@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../logic/grid_cubit.dart';
+import '../logic/grid/grid_cubit.dart';
 import '../models/grid.dart';
 import '../styles/theme.dart';
 

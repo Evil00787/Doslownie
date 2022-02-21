@@ -39,4 +39,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/words.db
+    - assets/pl-PL.db
+    - assets/en-US.db
