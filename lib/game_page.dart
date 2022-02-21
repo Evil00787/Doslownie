@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,54 +51,78 @@ class GamePage extends StatelessWidget {
     );
   }
 
-  Center _buildGrid(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          AppBar(
-            title: Center(child: Text("Dosłownie")),
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          ),
-          BlocBuilder<GridCubit, GridState>(
-            builder: (context, state) => Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (var y = 0; y < state.dimensions.y; y++)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (var x = 0; x < state.dimensions.x; x++)
-                        AnimatedTile(
-                          tile: state.tiles[y][x],
-                          delay: tileDelay(x),
-                          animationTime: tileAnimation,
-                        ),
-                    ],
-                  )
+  Widget _buildGrid(BuildContext context) {
+    return BlocBuilder<GridCubit, GridState>(
+      builder: (context, state) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AppBar(
+              title: Center(child: Text("Dosłownie")),
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              actions: [
+                state.state == GameState.won || state.state == GameState.lost
+                    ? IconButton(
+                        onPressed: () {
+                          _showEndGameDialog(context, state.state!, noDelay: true);
+                        },
+                        icon: Icon(Icons.restart_alt))
+                    : SizedBox.shrink()
               ],
             ),
-          ),
-          KeyboardWidget()
-        ],
+            Expanded(
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 800),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        for (var y = 0; y < state.dimensions.y; y++)
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                for (var x = 0; x < state.dimensions.x; x++)
+                                  Expanded(
+                                    child: AnimatedTile(
+                                      tile: state.tiles[y][x],
+                                      delay: tileDelay(x),
+                                      animationTime: tileAnimation,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            KeyboardWidget()
+          ],
+        ),
       ),
     );
   }
 
-  void _showEndGameDialog(BuildContext context, GameState state) {
+  void _showEndGameDialog(BuildContext context, GameState state, {bool noDelay = false}) {
     var cubit = context.read<GridCubit>();
     var wordLength = cubit.state.dimensions.x;
-    Future.delayed(tileDelay(wordLength) + tileAnimation).then(
-          (value) => showGeneralDialog(
-        context: context,
-        barrierDismissible: false,
-        transitionDuration: Duration(milliseconds: 400),
-        pageBuilder: (context, _, __) => EndGameDialog(
-          gameState: state,
-          startNewGame: () => cubit.restartGame(),
-          hiddenWord: cubit.word,
-        )
-      ),
+    Future.delayed(noDelay ? Duration() : tileDelay(wordLength) + tileAnimation).then(
+      (value) => showGeneralDialog(
+          context: context,
+          barrierDismissible: false,
+          transitionDuration: Duration(milliseconds: 400),
+          pageBuilder: (context, _, __) => EndGameDialog(
+                gameState: state,
+                startNewGame: () => cubit.restartGame(),
+                hiddenWord: cubit.word,
+              )),
     );
   }
 

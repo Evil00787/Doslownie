@@ -11,7 +11,7 @@ class KeyboardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<KeyboardCubit, KeyboardState>(
       builder: (context, state) => ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 600),
+        constraints: const BoxConstraints(maxWidth: 800),
         child: Column(
           children: [
             for (var tileRow in state.tileRows)

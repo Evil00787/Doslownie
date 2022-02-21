@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
       return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Dosłownie',
         theme: CustomTheme(context).getLightTheme(lightDynamic),
         darkTheme: CustomTheme(context).getDarkTheme(darkDynamic),
         themeMode: ThemeMode.dark,

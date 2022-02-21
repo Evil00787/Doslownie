@@ -22,8 +22,6 @@ class LetterCell extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(5),
       child: SizedBox(
-        width: 50,
-        height: 50,
         child: TweenAnimationBuilder<Color?>(
           tween: ColorTween(
             begin: _currentColor!,
