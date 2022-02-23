@@ -1,6 +1,13 @@
 {
   "title": "Letterally",
-  "newGame": "New game",
   "close": "Close",
-  "invalidWord": "Not a valid word"
+  "word": {
+    "hidden": "Hidden word",
+    "invalid": "Not a valid word"
+  },
+  "game": {
+    "new": "New game",
+    "lost": "You loose \uD83D\uDE1B",
+    "won": "You win \uD83E\uDD73"
+  }
 }

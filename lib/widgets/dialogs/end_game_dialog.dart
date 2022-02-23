@@ -27,8 +27,8 @@ class EndGameDialog extends StatelessWidget {
       title: Center(
         child: Text(
           gameState == GameState.won
-              ? "Sukces!".toUpperCase()
-              : "Przegrana :(".toUpperCase(),
+              ? AppLocales.I('game.won').toUpperCase()
+              : AppLocales.I('game.lost').toUpperCase(),
           style: TextStyle(fontSize: 32),
         ),
       ),
@@ -37,7 +37,7 @@ class EndGameDialog extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                "Ukryte słowo: ",
+                "${AppLocales.I('word.hidden')}: ",
                 style: TextStyle(fontSize: 25),
               ),
             ),
@@ -69,7 +69,7 @@ class EndGameDialog extends StatelessWidget {
 
   List<Widget> _buildActions(BuildContext context) => [
         Center(
-          child: MainActionButton(AppLocales.I('newGame').toUpperCase(), () {
+          child: MainActionButton(AppLocales.I('game.new').toUpperCase(), () {
             startNewGame();
             Navigator.of(context).pop();
           }),

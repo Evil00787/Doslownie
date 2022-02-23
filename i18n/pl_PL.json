@@ -1,6 +1,13 @@
 {
   "title": "Dosłownie",
-  "newGame": "Nowa gra",
   "close": "Zamknij",
-  "invalidWord": "Nieprawidłowe słowo"
+  "word": {
+    "hidden": "Ukryte słowo",
+    "invalid": "Nieprawidłowe słowo"
+},
+  "game": {
+    "new": "Nowa gra",
+    "lost": "Przegrana \uD83D\uDE1B",
+    "won": "Sukces \uD83E\uDD73"
+  }
 }
