@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/grid.dart';
-import 'flip_view.dart';
+import '../../models/grid.dart';
+import '../flip_view.dart';
 import 'letter_cell.dart';
 
 class AnimatedTile extends StatefulWidget {

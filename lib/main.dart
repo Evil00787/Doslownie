@@ -11,7 +11,7 @@ import 'logic/grid/grid_cubit.dart';
 import 'logic/keyboard_cubit.dart';
 import 'services/app_locales.dart';
 import 'services/word_repository.dart';
-import 'styles/theme.dart';
+import 'theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

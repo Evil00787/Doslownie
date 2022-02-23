@@ -50,7 +50,9 @@ class AppLocales {
 		if (_translations.isEmpty) await loadLocales();
 		if (this.locale == locale) return;
 		this.locale = locale;
-    _localeObservers.forEach((observer) => observer.onLocaleSet(locale));
+    for (var observer in _localeObservers) {
+      observer.onLocaleSet(locale);
+    }
 	}
 
 	Future loadLocales() async {

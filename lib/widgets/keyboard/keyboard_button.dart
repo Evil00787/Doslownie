@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../logic/grid/grid_cubit.dart';
-import '../models/grid.dart';
-import '../styles/theme.dart';
+import '../../logic/grid/grid_cubit.dart';
+import '../../models/grid.dart';
+import '../../theme.dart';
 
 class KeyboardButton extends StatelessWidget {
   final Tile tile;
@@ -72,7 +72,8 @@ class KeyboardButton extends StatelessWidget {
           tapTargetSize: MaterialTapTargetSize.padded,
           primary: value,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
         ),
         onPressed: () => _onPressed(context),
         child: Padding(

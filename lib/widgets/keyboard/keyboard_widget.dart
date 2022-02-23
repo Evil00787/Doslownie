@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../logic/keyboard_cubit.dart';
+import '../../logic/keyboard_cubit.dart';
 import 'keyboard_button.dart';
 
 class KeyboardWidget extends StatelessWidget {

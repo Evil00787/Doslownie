@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/grid.dart';
-import '../styles/theme.dart';
+import '../../models/grid.dart';
+import '../../theme.dart';
 
 class LetterCell extends StatelessWidget {
   final Tile tile;

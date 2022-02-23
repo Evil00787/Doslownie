@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../models/game_state.dart';
-import '../models/grid.dart';
-import 'letter_cell.dart';
-import 'main_action_button.dart';
+import '../../models/game_state.dart';
+import '../../models/grid.dart';
+import '../grid/letter_cell.dart';
+import '../main_action_button.dart';
 
 class EndGameDialog extends StatelessWidget {
   final GameState gameState;
   final void Function() startNewGame;
   final String hiddenWord;
+
   const EndGameDialog({
     Key? key,
     required this.gameState,
