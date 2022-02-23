@@ -58,7 +58,8 @@ class GamePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppBar(
-              title: Center(child: Text(AppLocales.I('title'))),
+              title: Text(AppLocales.I('title')),
+              centerTitle: true,
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               actions: [
                 state.state == GameState.won || state.state == GameState.lost
@@ -71,29 +72,31 @@ class GamePage extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 800),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 800),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       for (var y = 0; y < dimensions.y; y++)
                         Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              for (var x = 0; x < dimensions.x; x++)
-                                AspectRatio(
-                                  aspectRatio: 1,
-                                  child: AnimatedTile(
-                                    tile: state.tiles[y][x],
-                                    delay: tileDelay(x + y),
-                                    animationTime: tileAnimation,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                for (var x = 0; x < dimensions.x; x++)
+                                  AspectRatio(
+                                    aspectRatio: 1,
+                                    child: AnimatedTile(
+                                      tile: state.tiles[y][x],
+                                      delay: tileDelay(x + y),
+                                      animationTime: tileAnimation,
+                                    ),
                                   ),
-                                ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                     ],

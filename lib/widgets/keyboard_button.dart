@@ -76,7 +76,7 @@ class KeyboardButton extends StatelessWidget {
         ),
         onPressed: () => _onPressed(context),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
           child: _buildSign(context),
         ),
       ),
