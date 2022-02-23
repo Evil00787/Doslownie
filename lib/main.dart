@@ -38,7 +38,6 @@ class _MyAppState extends State<MyApp> implements CurrentLocaleObserver {
         theme: CustomTheme(context).getLightTheme(lightDynamic),
         darkTheme: CustomTheme(context).getDarkTheme(darkDynamic),
         themeMode: ThemeMode.dark,
-
         localizationsDelegates: const [
           AppLocales.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -50,11 +49,14 @@ class _MyAppState extends State<MyApp> implements CurrentLocaleObserver {
           _withCubit(
             _withCubit(
               GamePage(),
-              (c) => GridCubit(c.read<GameConfigCubit>(), c.read<KeyboardCubit>()),
+              (c) => GridCubit(
+                c.read<GameConfigCubit>(),
+                c.read<KeyboardCubit>(),
+              ),
             ),
-            (_) => GameConfigCubit(),
+            (c) => KeyboardCubit(c.read<GameConfigCubit>(),),
           ),
-          (_) => KeyboardCubit(),
+          (_) => GameConfigCubit(),
         ),
       );
     });

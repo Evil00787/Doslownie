@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/game_config_cubit.dart';
 import '../../logic/grid/grid_cubit.dart';
 import '../../models/game_state.dart';
+import '../../services/app_locales.dart';
 import 'end_game_dialog.dart';
 import '../grid/game_grid.dart';
 
@@ -25,7 +26,7 @@ class GameDialogs extends StatelessWidget {
       child: BlocListener<GridCubit, GridState>(
         listenWhen: (oldState, newState) => newState.message != null,
         listener: (context, state) => _showFlushbar(
-          message: state.message!,
+          message: AppLocales.I(state.message!),
           context: context,
           icon: Icons.warning_rounded,
         ),

@@ -49,7 +49,7 @@ class GridCubit extends Cubit<GridState> {
     if (pointer.x < dimensions.x) return;
     var input = state.tiles[pointer.y].map((e) => e.letter).join('');
     if (!_wordRepository.isValidWord(input)) {
-      emit(state.copyWith(message: 'Not a valid word'));
+      emit(state.copyWith(message: 'invalidWord'));
       return;
     }
     var data = _copyTiles();

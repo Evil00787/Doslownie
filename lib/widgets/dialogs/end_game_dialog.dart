@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/game_state.dart';
 import '../../models/grid.dart';
+import '../../services/app_locales.dart';
 import '../grid/letter_cell.dart';
 import '../main_action_button.dart';
 
@@ -68,7 +69,7 @@ class EndGameDialog extends StatelessWidget {
 
   List<Widget> _buildActions(BuildContext context) => [
         Center(
-          child: MainActionButton("NOWA GRA", () {
+          child: MainActionButton(AppLocales.I('newGame').toUpperCase(), () {
             startNewGame();
             Navigator.of(context).pop();
           }),
@@ -89,7 +90,7 @@ class EndGameDialog extends StatelessWidget {
                   horizontal: 24.0,
                 ),
                 child: Text(
-                  "ZAMKNIJ",
+                  AppLocales.I('close').toUpperCase(),
                   style: TextStyle(fontSize: 24.0),
                 ),
               ),
