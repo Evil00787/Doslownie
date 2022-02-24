@@ -7,12 +7,12 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'app_locales.dart';
 
 class WordRepository {
-  final _words = <Locale, Map<int, List<String>>>{};
-  late Locale _locale;
+  final _words = <Locale, Map<ListType, Map<int, List<String>>>>{};
+  Locale? _locale;
   late int _wordLength;
 
-  List<String> _getList() {
-    var list = _words[_locale]?[_wordLength];
+  List<String> _getList({ListType type = ListType.inputList}) {
+    var list = _words[_locale]?[type]?[_wordLength];
     if (list == null) print('Invalid configuration');
     return list ?? [];
   }
@@ -29,13 +29,35 @@ class WordRepository {
   };
 
   WordRepository() {
-    load(Locale e) => rootBundle.loadString('assets/${e.toLanguageTag()}.db');
-    Future.wait(AppLocalesDelegate.supportedLocales.map(load)).then((value) {
-      for (var i = 0; i < AppLocalesDelegate.supportedLocales.length; i++) {
-        _words[AppLocalesDelegate.supportedLocales[i]] = _loadWords(value[i]);
+    load(Locale e) => {
+      ListType.inputList: rootBundle.loadString('assets/${e.toLanguageTag()}.db'),
+      ListType.riddleList: rootBundle.loadString('assets/riddle-${e.toLanguageTag()}.db')
+    };
+
+    var timer;
+    timer = Timer.periodic(Duration(milliseconds: 100), (_) {
+      if (_locale != null) {
+        var localesDelegate = AppLocalesDelegate.supportedLocales.map(load).toList();
+
+        for (var i = 0; i < localesDelegate.length; i++) {
+          _words[AppLocalesDelegate.supportedLocales[i]] = {ListType.inputList: {0: []}, ListType.riddleList: {0: []}};
+        }
+        Future.wait<void>([
+          for (var i = 0; i < localesDelegate.length; i++)
+            localesDelegate[i][ListType.inputList]!.then((value) {
+              _words[AppLocalesDelegate.supportedLocales[i]]?[ListType.inputList] = _loadWords(value);
+            }),
+          for (var i = 0; i < localesDelegate.length; i++)
+            localesDelegate[i][ListType.riddleList]!.then((value) {
+              _words[AppLocalesDelegate.supportedLocales[i]]?[ListType.riddleList]= _loadWords(value);
+            })
+        ]).whenComplete(() {
+          _completer.complete();
+        });
+        timer.cancel();
       }
-      _completer.complete();
     });
+
   }
 
   bool isValidString(String string) => _validLetters[_locale]!.hasMatch(string);
@@ -46,7 +68,7 @@ class WordRepository {
   }
 
   String getRandomWord() {
-    var list = _getList();
+    var list = _getList(type: ListType.riddleList);
     if (list.isEmpty) return '';
     return list[Random().nextInt(list.length)];
   }
@@ -60,4 +82,8 @@ class WordRepository {
     }
     return map;
   }
+}
+
+enum ListType {
+  riddleList, inputList
 }
