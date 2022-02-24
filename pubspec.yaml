@@ -47,7 +47,7 @@ flutter:
   assets:
     - i18n/en_US.json
     - i18n/pl_PL.json
+    - assets/pl-PL_extended.db
+    - assets/en-US_extended.db
     - assets/pl-PL.db
     - assets/en-US.db
-    - assets/riddle-pl-PL.db
-    - assets/riddle-en-US.db

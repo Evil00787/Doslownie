@@ -6,12 +6,16 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'app_locales.dart';
 
+typedef WordList = List<String>;
+typedef Dictionary = Map<int, WordList>;
+typedef DictionarySet = Map<DictionaryType, Dictionary>;
+
 class WordRepository {
-  final _words = <Locale, Map<ListType, Map<int, List<String>>>>{};
+  final _words = <Locale, DictionarySet>{};
   Locale? _locale;
   late int _wordLength;
 
-  List<String> _getList({ListType type = ListType.inputList}) {
+  List<String> _getDictionary(DictionaryType type) {
     var list = _words[_locale]?[type]?[_wordLength];
     if (list == null) print('Invalid configuration');
     return list ?? [];
@@ -29,51 +33,34 @@ class WordRepository {
   };
 
   WordRepository() {
-    load(Locale e) => {
-      ListType.inputList: rootBundle.loadString('assets/${e.toLanguageTag()}.db'),
-      ListType.riddleList: rootBundle.loadString('assets/riddle-${e.toLanguageTag()}.db')
-    };
-
-    var timer;
-    timer = Timer.periodic(Duration(milliseconds: 100), (_) {
-      if (_locale != null) {
-        var localesDelegate = AppLocalesDelegate.supportedLocales.map(load).toList();
-
-        for (var i = 0; i < localesDelegate.length; i++) {
-          _words[AppLocalesDelegate.supportedLocales[i]] = {ListType.inputList: {0: []}, ListType.riddleList: {0: []}};
-        }
-        Future.wait<void>([
-          for (var i = 0; i < localesDelegate.length; i++)
-            localesDelegate[i][ListType.inputList]!.then((value) {
-              _words[AppLocalesDelegate.supportedLocales[i]]?[ListType.inputList] = _loadWords(value);
-            }),
-          for (var i = 0; i < localesDelegate.length; i++)
-            localesDelegate[i][ListType.riddleList]!.then((value) {
-              _words[AppLocalesDelegate.supportedLocales[i]]?[ListType.riddleList]= _loadWords(value);
-            })
-        ]).whenComplete(() {
-          _completer.complete();
-        });
-        timer.cancel();
-      }
+    var locales = AppLocalesDelegate.supportedLocales;
+    var entryFuture = Future.wait(locales.map((l) => _loadLocale(l)));
+    entryFuture.then((entries) {
+      _words.addEntries(entries);
+      _completer.complete();
     });
+  }
 
+  Future<MapEntry<Locale, DictionarySet>> _loadLocale(Locale l) async {
+    var types = DictionaryType.values.map((t) => _loadDictionary(l, t));
+    return Future.wait(types).then((map) => MapEntry(l, Map.fromEntries(map)));
+  }
+
+  Future<MapEntry<DictionaryType, Dictionary>> _loadDictionary(Locale l, DictionaryType t) async {
+    var file = await rootBundle.loadString(t.asset(l));
+    var words = file.replaceAll("\r", "").split('\n').where(isValidString).map((e) => e.toUpperCase());
+    return MapEntry(t, _groupBy<String, int>(words, (p0) => p0.length));
   }
 
   bool isValidString(String string) => _validLetters[_locale]!.hasMatch(string);
 
-  Map<int, List<String>> _loadWords(String l) {
-    var words = l.replaceAll("\r", "").split('\n').where(isValidString).map((e) => e.toUpperCase());
-    return _groupBy<String, int>(words, (p0) => p0.length);
-  }
-
   String getRandomWord() {
-    var list = _getList(type: ListType.riddleList);
+    var list = _getDictionary(DictionaryType.basic);
     if (list.isEmpty) return '';
     return list[Random().nextInt(list.length)];
   }
 
-  bool isValidWord(String word) => _getList().contains(word);
+  bool isValidWord(String word) => _getDictionary(DictionaryType.extended).contains(word);
 
   Map<T, List<S>> _groupBy<S, T>(Iterable<S> values, T Function(S) key) {
     var map = <T, List<S>>{};
@@ -84,6 +71,13 @@ class WordRepository {
   }
 }
 
-enum ListType {
-  riddleList, inputList
+enum DictionaryType {
+  basic, extended
+}
+
+extension DictionaryAsset on DictionaryType {
+  String asset(Locale locale) => {
+    DictionaryType.extended: 'assets/${locale.toLanguageTag()}_extended.db',
+    DictionaryType.basic: 'assets/${locale.toLanguageTag()}.db'
+  }[this]!;
 }
