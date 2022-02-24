@@ -1,7 +1,6 @@
 <svg width="864" height="864" xmlns="http://www.w3.org/2000/svg">
  <g id="Layer_1">
   <title>Layer 1</title>
-  <rect x="1.72414" width="864" height="864" fill="#FFF" id="svg_3"/>
   <rect stroke="#536DFE" opacity="0.8" rx="60" stroke-width="3" id="svg_1" height="342" width="342" y="261.00001" x="261" fill="#536dfe"/>
   <text transform="matrix(1.4107 0 0 0.996976 -195.505 -146.299)" stroke="#000" fill="#FFF" stroke-width="0" x="376.99925" y="670.56667" id="svg_8" font-size="250" font-family="'JetBrains Mono'" text-anchor="start" xml:space="preserve">D</text>
  </g>

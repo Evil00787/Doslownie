@@ -44,10 +44,11 @@ class CustomTheme {
         onPrimary: Colors.white60,
         secondary: Colors.blueGrey,
         onSecondary: Colors.white54,
-        surfaceVariant: Colors.white24,
+        surfaceVariant: Colors.grey[900],
         surface: Colors.black26,
         onSurfaceVariant: Colors.white60,
         primaryContainer: Colors.indigoAccent.withAlpha(120),
+        onPrimaryContainer: Colors.indigo[200],
       );
     }
     return ThemeData(
@@ -59,17 +60,15 @@ class CustomTheme {
 }
 
 extension TileColor on TileState {
-  Color color(context, {bool isKeyboard = false}) => {
-        TileState.incorrect: isKeyboard
-            ? Theme.of(context).colorScheme.surfaceVariant.withAlpha(120)
-            : Theme.of(context).colorScheme.surfaceVariant.withAlpha(120),
+  Color color(context) => {
+        TileState.incorrect: Theme.of(context).colorScheme.surfaceVariant.withAlpha(120),
         TileState.moved: Colors.yellow
             .harmonizeWith(Theme.of(context).colorScheme.primary)
             .withAlpha(160),
         TileState.correct: Colors.green
             .harmonizeWith(Theme.of(context).colorScheme.primary)
             .withAlpha(160),
-        TileState.unknown: Theme.of(context).colorScheme.surfaceVariant,
+        TileState.unknown: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(80),
         TileState.locked: Colors.transparent,
         TileState.active: Theme.of(context).colorScheme.primary,
       }[this]!;

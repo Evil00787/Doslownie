@@ -23,6 +23,7 @@ dependencies:
   dynamic_color: ^1.1.2
   another_flushbar: ^1.10.28
   expand_tap_area: ^1.1.0
+  flutter_svg: ^1.0.3
   flutter_launcher_icons:
     git: https://github.com/dirkbo/flutter_launcher_icons.git
 
@@ -45,6 +46,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/icons/icon.svg
     - i18n/en_US.json
     - i18n/pl_PL.json
     - assets/pl-PL.db

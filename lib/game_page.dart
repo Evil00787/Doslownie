@@ -13,7 +13,7 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     FocusScope.of(context).requestFocus(_focusNode);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer.withAlpha(80),
       body: RawKeyboardListener(
         focusNode: _focusNode,
         child: GameDialogs(child: GameGrid()),

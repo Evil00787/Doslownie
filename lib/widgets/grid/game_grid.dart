@@ -7,6 +7,7 @@ import '../../logic/game_config_cubit.dart';
 import '../../logic/grid/grid_cubit.dart';
 import '../../models/game_state.dart';
 import '../../services/app_locales.dart';
+import '../custom_app_bar.dart';
 import 'animated_tile.dart';
 import '../dialogs/game_dialogs.dart';
 import '../keyboard/keyboard_widget.dart';
@@ -24,7 +25,7 @@ class GameGrid extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildAppBar(context, state),
+            CustomAppBar(state: state),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
@@ -44,51 +45,35 @@ class GameGrid extends StatelessWidget {
     );
   }
 
-  Column _buildGrid(Point<int> dimensions, GridState state) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        for (var y = 0; y < dimensions.y; y++)
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var x = 0; x < dimensions.x; x++)
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: AnimatedTile(
-                        tile: state.tiles[y][x],
-                        delay: tileDelay(x + y),
-                        animationTime: tileAnimation,
+  Widget _buildGrid(Point<int> dimensions, GridState state) {
+    return IntrinsicWidth(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (var y = 0; y < dimensions.y; y++)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var x = 0; x < dimensions.x; x++)
+                      Expanded(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: AnimatedTile(
+                            tile: state.tiles[y][x],
+                            delay: tileDelay(x + y),
+                            animationTime: tileAnimation,
+                          ),
+                        ),
                       ),
-                    ),
-                ],
-              ),
-            ),
-          )
-      ],
-    );
-  }
-
-  AppBar _buildAppBar(BuildContext context, GridState state) {
-    return AppBar(
-      title: Text(AppLocales.I('title')),
-      centerTitle: true,
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      actions: [
-        state.state == GameState.won || state.state == GameState.lost
-            ? IconButton(
-                onPressed: () => GameDialogs.showEndGameDialog(
-                  context,
-                  state.state!,
-                  noDelay: true,
+                  ],
                 ),
-                icon: Icon(Icons.restart_alt),
-              )
-            : SizedBox.shrink()
-      ],
+              ),
+            )
+        ],
+      ),
     );
   }
 }

@@ -53,7 +53,7 @@ class KeyboardButton extends StatelessWidget {
       ? Theme.of(context).colorScheme.primary
       : isBackspace
           ? Theme.of(context).colorScheme.secondary
-          : tile.state.color(context, isKeyboard: true);
+          : tile.state.color(context);
 
   Widget _buildButton(BuildContext context) {
     var newColor = _buttonColor(context);
@@ -69,8 +69,8 @@ class KeyboardButton extends StatelessWidget {
       duration: animationTime,
       builder: (context, value, child) => ElevatedButton(
         style: ElevatedButton.styleFrom(
-          tapTargetSize: MaterialTapTargetSize.padded,
           primary: value,
+          padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),

@@ -1,6 +1,7 @@
 {
   "title": "Letterally",
   "close": "Close",
+  "start": "Start",
   "word": {
     "hidden": "Hidden word",
     "invalid": "Not a valid word"
@@ -9,5 +10,9 @@
     "new": "New game",
     "lost": "You loose \uD83D\uDE1B",
     "won": "You win \uD83E\uDD73"
+  },
+  "settings": {
+    "length": "Word length",
+    "chances": "Number of chances"
   }
 }

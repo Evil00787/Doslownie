@@ -1,6 +1,7 @@
 {
   "title": "Dosłownie",
   "close": "Zamknij",
+  "start": "Start",
   "word": {
     "hidden": "Ukryte słowo",
     "invalid": "Nieprawidłowe słowo"
@@ -9,5 +10,9 @@
     "new": "Nowa gra",
     "lost": "Przegrana \uD83D\uDE1B",
     "won": "Sukces \uD83E\uDD73"
+  },
+  "settings": {
+    "length": "Długość słów",
+    "chances": "Liczba szans"
   }
 }
