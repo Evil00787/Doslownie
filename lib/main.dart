@@ -1,5 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> implements CurrentLocaleObserver {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
     return DynamicColorBuilder(builder: (
       ColorScheme? lightDynamic,
       ColorScheme? darkDynamic,
