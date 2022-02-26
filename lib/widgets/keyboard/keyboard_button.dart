@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../logic/grid/grid_cubit.dart';
 import '../../models/grid.dart';
-import '../../theme.dart';
+import '../../utils/theme.dart';
 
 class KeyboardButton extends StatelessWidget {
   final Tile tile;

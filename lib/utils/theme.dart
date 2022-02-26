@@ -1,7 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
-import 'models/grid.dart';
+import '../models/grid.dart';
 
 class CustomTheme {
   dynamic context;

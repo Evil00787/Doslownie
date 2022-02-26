@@ -12,7 +12,7 @@ typedef DictionarySet = Map<DictionaryType, Dictionary>;
 
 class WordRepository {
   final _words = <Locale, DictionarySet>{};
-  Locale? _locale;
+  late Locale _locale;
   late int _wordLength;
 
   List<String> _getDictionary(DictionaryType type) {
@@ -46,13 +46,20 @@ class WordRepository {
     return Future.wait(types).then((map) => MapEntry(l, Map.fromEntries(map)));
   }
 
-  Future<MapEntry<DictionaryType, Dictionary>> _loadDictionary(Locale l, DictionaryType t) async {
+  Future<MapEntry<DictionaryType, Dictionary>> _loadDictionary(
+      Locale l, DictionaryType t) async {
     var file = await rootBundle.loadString(t.asset(l));
-    var words = file.replaceAll("\r", "").split('\n').where(isValidString).map((e) => e.toUpperCase());
+    var words = file
+        .replaceAll("\r", "")
+        .split('\n')
+        .where((w) => isValidString(w, l) && w.isNotEmpty)
+        .map((e) => e.toUpperCase());
     return MapEntry(t, _groupBy<String, int>(words, (p0) => p0.length));
   }
 
-  bool isValidString(String string) => _validLetters[_locale]!.hasMatch(string);
+  bool isValidString(String string, [Locale? locale]) {
+    return _validLetters[locale ?? _locale]!.hasMatch(string);
+  }
 
   String getRandomWord() {
     var list = _getDictionary(DictionaryType.basic);
@@ -60,7 +67,11 @@ class WordRepository {
     return list[Random().nextInt(list.length)];
   }
 
-  bool isValidWord(String word) => _getDictionary(DictionaryType.extended).contains(word);
+  List<int>? getSupportedWordLengths() =>
+      _words[_locale]?[DictionaryType.basic]?.keys.toList();
+
+  bool isValidWord(String word) =>
+      _getDictionary(DictionaryType.extended).contains(word);
 
   Map<T, List<S>> _groupBy<S, T>(Iterable<S> values, T Function(S) key) {
     var map = <T, List<S>>{};
@@ -71,13 +82,11 @@ class WordRepository {
   }
 }
 
-enum DictionaryType {
-  basic, extended
-}
+enum DictionaryType { basic, extended }
 
 extension DictionaryAsset on DictionaryType {
   String asset(Locale locale) => {
-    DictionaryType.extended: 'assets/${locale.toLanguageTag()}_extended.db',
-    DictionaryType.basic: 'assets/${locale.toLanguageTag()}.db'
-  }[this]!;
+        DictionaryType.extended: 'assets/${locale.toLanguageTag()}_extended.db',
+        DictionaryType.basic: 'assets/${locale.toLanguageTag()}.db'
+      }[this]!;
 }

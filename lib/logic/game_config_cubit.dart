@@ -7,10 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
 import '../services/word_repository.dart';
+import '../utils/utils.dart';
 
 class GameConfigCubit extends Cubit<GameConfigState> {
   final _wordRepository = GetIt.I<WordRepository>();
-
 
   GameConfigCubit()
       : super(GameConfigState(
@@ -18,15 +18,22 @@ class GameConfigCubit extends Cubit<GameConfigState> {
           dimensions: Point<int>(5, 6),
         )) {
     _update();
+    _wordRepository.ready.then(
+      (_) => emit(
+        state.copyWith(wordLengths: _wordRepository.getSupportedWordLengths()),
+      ),
+    );
   }
 
+  List<int> get difficultyLevels => 4.to(7);
+
   void setLocale(Locale locale) {
-    emit(GameConfigState(locale: locale, dimensions: state.dimensions));
+    emit(state.copyWith(locale: locale));
     _update();
   }
 
   void setWordLength(Point<int> dimensions) {
-    emit(GameConfigState(locale: state.locale, dimensions: dimensions));
+    emit(state.copyWith(dimensions: dimensions));
     _update();
   }
 
@@ -39,9 +46,26 @@ class GameConfigCubit extends Cubit<GameConfigState> {
 class GameConfigState extends Equatable {
   final Locale locale;
   final Point<int> dimensions;
+  final List<int>? wordLengths;
 
-  GameConfigState({required this.locale, required this.dimensions});
+  GameConfigState({
+    required this.locale,
+    required this.dimensions,
+    this.wordLengths,
+  });
+
+  GameConfigState copyWith({
+    Locale? locale,
+    Point<int>? dimensions,
+    List<int>? wordLengths,
+  }) {
+    return GameConfigState(
+      locale: locale ?? this.locale,
+      dimensions: dimensions ?? this.dimensions,
+      wordLengths: wordLengths ?? this.wordLengths,
+    );
+  }
 
   @override
-  List<Object?> get props => [locale, dimensions];
+  List<Object?> get props => [locale, dimensions, wordLengths];
 }

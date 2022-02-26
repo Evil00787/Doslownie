@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'logic/grid/grid_cubit.dart';
-import 'widgets/dialogs/game_dialogs.dart';
-import 'widgets/grid/game_grid.dart';
+import '../logic/grid/grid_cubit.dart';
+import '../widgets/dialogs/game_dialogs.dart';
+import '../widgets/grid/game_grid.dart';
 
 class GamePage extends StatelessWidget {
   final _focusNode = FocusNode();

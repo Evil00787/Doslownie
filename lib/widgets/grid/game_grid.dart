@@ -5,11 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../logic/game_config_cubit.dart';
 import '../../logic/grid/grid_cubit.dart';
-import '../../models/game_state.dart';
-import '../../services/app_locales.dart';
 import '../custom_app_bar.dart';
 import 'animated_tile.dart';
-import '../dialogs/game_dialogs.dart';
 import '../keyboard/keyboard_widget.dart';
 
 class GameGrid extends StatelessWidget {
@@ -31,9 +28,9 @@ class GameGrid extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: 800),
-                  child: BlocBuilder<GameConfigCubit, GameConfigState>(
-                    buildWhen: (oldState, newState) => oldState.dimensions != newState.dimensions,
-                    builder: (_, config) => _buildGrid(config.dimensions, state),
+                  child: _buildGrid(
+                    context.watch<GameConfigCubit>().state.dimensions,
+                    state,
                   ),
                 ),
               ),
