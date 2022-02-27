@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart' show rootBundle;
 
+import '../utils/utils.dart';
 import 'app_locales.dart';
 
 typedef WordList = List<String>;
@@ -54,7 +55,7 @@ class WordRepository {
         .split('\n')
         .where((w) => isValidString(w, l) && w.isNotEmpty)
         .map((e) => e.toUpperCase());
-    return MapEntry(t, _groupBy<String, int>(words, (p0) => p0.length));
+    return MapEntry(t, words.groupBy<int>((p0) => p0.length));
   }
 
   bool isValidString(String string, [Locale? locale]) {
@@ -68,18 +69,10 @@ class WordRepository {
   }
 
   List<int>? getSupportedWordLengths() =>
-      _words[_locale]?[DictionaryType.basic]?.keys.toList();
+      _words[_locale]?[DictionaryType.basic]?.keys.toList()?..sort();
 
   bool isValidWord(String word) =>
       _getDictionary(DictionaryType.extended).contains(word);
-
-  Map<T, List<S>> _groupBy<S, T>(Iterable<S> values, T Function(S) key) {
-    var map = <T, List<S>>{};
-    for (var element in values) {
-      (map[key(element)] ??= []).add(element);
-    }
-    return map;
-  }
 }
 
 enum DictionaryType { basic, extended }
