@@ -1,13 +1,13 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import 'logic/game_config_cubit.dart';
 import 'logic/grid/grid_cubit.dart';
 import 'logic/keyboard_cubit.dart';
+import 'logic/qube_cubit.dart';
 import 'pages/game_page.dart';
 import 'pages/menu_page.dart';
 import 'services/app_locales.dart';
@@ -43,9 +43,6 @@ class _MyAppState extends State<MyApp> implements CurrentLocaleObserver {
         themeMode: ThemeMode.dark,
         localizationsDelegates: const [
           AppLocales.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalesDelegate.supportedLocales,
         initialRoute: 'menu',
@@ -58,13 +55,17 @@ class _MyAppState extends State<MyApp> implements CurrentLocaleObserver {
         'menu': (c) => MenuPage(),
         'game': (c) => CubitUtils.withCubit(
               CubitUtils.withCubit(
-                GamePage(),
-                (c) => GridCubit(
-                  c.read<GameConfigCubit>(),
-                  c.read<KeyboardCubit>(),
+                CubitUtils.withCubit(
+                  GamePage(),
+                  (c) => GridCubit(
+                    c.read<GameConfigCubit>(),
+                    c.read<KeyboardCubit>(),
+                    c.read<QubeCubit>(),
+                  ),
                 ),
+                (c) => KeyboardCubit(c.read<GameConfigCubit>()),
               ),
-              (c) => KeyboardCubit(c.read<GameConfigCubit>()),
+              (c) => QubeCubit(),
             ),
       };
 

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:intl/message_format.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/message_format.dart';
 
 typedef TranslateFunc = String Function(BuildContext);
 

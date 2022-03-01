@@ -1,30 +1,38 @@
 import 'package:equatable/equatable.dart';
 
-enum TileState { incorrect, moved, correct, unknown, active, locked }
+import 'status.dart';
 
-extension TileGroups on TileState {
-  bool get uncovered => [TileState.incorrect, TileState.moved, TileState.correct].contains(this);
+typedef TileRow = List<Tile>;
+typedef TileGrid = List<TileRow>;
+
+class TileOpacity extends Equatable {
+  final double opacity;
+
+  TileOpacity(this.opacity);
+
+  @override
+  List<Object?> get props => [opacity];
 }
 
 class Tile extends Equatable {
   final String letter;
-  final TileState state;
+  final TileStatus status;
 
-  Tile({required this.letter, required this.state});
+  Tile({required this.letter, required this.status});
 
-  Tile copyWith({String? letter, TileState? state}) => Tile(
+  Tile copyWith({String? letter, TileStatus? status}) => Tile(
     letter: letter ?? this.letter,
-    state: state ?? this.state,
+    status: status ?? this.status,
   );
 
   @override
-  List<Object?> get props => [letter, state];
+  List<Object?> get props => [letter, status];
 }
 
-extension TileCopy on List<Tile> {
-  List<Tile> copyWith({List<TileState>? states}) => [
+extension TileCopy on TileRow {
+  TileRow copyWith({List<TileStatus>? states}) => [
     for (var x = 0; x < length; x++)
-      this[x].copyWith(state: states?[x] ?? this[x].state)
+      this[x].copyWith(status: states?[x] ?? this[x].status)
   ];
 }
 

@@ -1,7 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
-import '../models/grid.dart';
+import '../models/status.dart';
 
 class CustomTheme {
   dynamic context;
@@ -59,23 +59,23 @@ class CustomTheme {
   }
 }
 
-extension TileColor on TileState {
+extension TileColor on TileStatus {
   Color color(context) => {
-        TileState.incorrect: Theme.of(context).colorScheme.surfaceVariant.withAlpha(120),
-        TileState.moved: Colors.yellow
+        TileStatus.incorrect: Theme.of(context).colorScheme.surfaceVariant.withAlpha(120),
+        TileStatus.moved: Colors.yellow
             .harmonizeWith(Theme.of(context).colorScheme.primary)
             .withAlpha(160),
-        TileState.correct: Colors.green
+        TileStatus.correct: Colors.green
             .harmonizeWith(Theme.of(context).colorScheme.primary)
             .withAlpha(160),
-        TileState.unknown: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(80),
-        TileState.locked: Colors.transparent,
-        TileState.active: Theme.of(context).colorScheme.primary,
+        TileStatus.unknown: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(80),
+        TileStatus.locked: Colors.transparent,
+        TileStatus.active: Theme.of(context).colorScheme.primary,
       }[this]!;
 
   Color onColor(context) {
     var colorScheme = Theme.of(context).colorScheme;
-    if (this == TileState.active) return colorScheme.onPrimary;
+    if (this == TileStatus.active) return colorScheme.onPrimary;
     return colorScheme.onSurfaceVariant;
   }
 }

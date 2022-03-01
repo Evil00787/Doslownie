@@ -1,28 +1,28 @@
 part of 'grid_cubit.dart';
 
 class GridState extends Equatable {
-  final List<List<Tile>> tiles;
+  final TileGrid tiles;
   final String? message;
-  final GameState? state;
+  final GameStatus status;
 
   GridState({
     required this.tiles,
     this.message,
-    this.state,
+    required this.status,
   });
 
   GridState copyWith({
-    List<List<Tile>>? tiles,
+    TileGrid? tiles,
     String? message,
-    GameState? state,
+    GameStatus? status,
   }) {
     return GridState(
       tiles: tiles ?? this.tiles,
       message: message,
-      state: state ?? this.state,
+      status: status ?? this.status,
     );
   }
 
   @override
-  List<Object?> get props => [tiles, message, state];
+  List<Object?> get props => [tiles, message, status];
 }

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/grid.dart';
+import '../models/status.dart';
 import 'game_config_cubit.dart';
 
 class KeyboardCubit extends Cubit<KeyboardState> {
@@ -32,7 +33,7 @@ class KeyboardCubit extends Cubit<KeyboardState> {
       var tileIndex = state.tileRows[rowIndex].indexWhere(
         (element) => element.letter == tile.letter,
       );
-      if (state.tileRows[rowIndex][tileIndex].state != TileState.correct) {
+      if (state.tileRows[rowIndex][tileIndex].status != TileStatus.correct) {
         newTiles[rowIndex][tileIndex] = tile;
       }
     }
@@ -41,21 +42,21 @@ class KeyboardCubit extends Cubit<KeyboardState> {
 
   void resetColors() => emit(KeyboardState(_tileRows(_configCubit.state.locale)));
 
-  static List<List<Tile>> _tileRows(Locale locale, [List<List<Tile>>? from]) {
+  static TileGrid _tileRows(Locale locale, [TileGrid? from]) {
     var letters = _letters(locale);
     return [
       for (var i = 0; i < letters.length; i++)
         from?[i].copyWith() ??
             letters[i]
                 .split('')
-                .map((e) => Tile(letter: e, state: TileState.unknown))
+                .map((e) => Tile(letter: e, status: TileStatus.unknown))
                 .toList(),
     ];
   }
 }
 
 class KeyboardState extends Equatable {
-  final List<List<Tile>> tileRows;
+  final TileGrid tileRows;
 
   KeyboardState(this.tileRows);
 

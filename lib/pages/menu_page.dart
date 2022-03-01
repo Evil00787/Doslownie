@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../services/app_locales.dart';
-import '../widgets/custom_app_bar.dart';
 import '../widgets/game_config_card.dart';
 
 class MenuPage extends StatefulWidget {
@@ -20,7 +19,11 @@ class _MenuPageState extends State<MenuPage> {
       backgroundColor: scheme.primaryContainer.withAlpha(80),
       body: Column(
         children: [
-          CustomAppBar(),
+          AppBar(
+            title: Text(AppLocales.I('title')),
+            centerTitle: true,
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          ),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 300, maxHeight: 300),
             child: SvgPicture.asset(

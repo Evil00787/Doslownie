@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../models/grid.dart';
-import '../flip_view.dart';
+import '../../models/status.dart';
+import '../animation/flip_view.dart';
 import 'letter_cell.dart';
 
 class AnimatedTile extends StatefulWidget {
@@ -44,10 +45,8 @@ class _AnimatedTileState extends State<AnimatedTile>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.tile.state.uncovered && _animCtrl.value == 0) {
+    if (widget.tile.status.uncovered && _animCtrl.value == 0) {
       Future.delayed(widget.delay, () => _animCtrl.forward().then(_switchSides));
-    } else if (!widget.tile.state.uncovered && _animCtrl.value == 1) {
-      Future.delayed(widget.delay, () => _animCtrl.reverse().then(_switchSides));
     } else {
       _currentTile = widget.tile;
     }

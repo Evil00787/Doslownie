@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class CubitUtils {
   static Widget withCubit<T extends Cubit>(Widget widget, Create<T> cubit) {
@@ -24,4 +25,17 @@ extension Group<S> on Iterable<S> {
     }
     return map;
   }
+}
+
+extension Rotations on Matrix4 {
+  Matrix4 rotateGlob(Vector3 axis, double angle) {
+    return this..rotate(absoluteRotate(axis), angle);
+  }
+  Matrix4 rotateGlobX(double angle) {
+    return this..rotate(right, angle);
+  }
+}
+
+extension ColorUtils on Color {
+  Color multiplyOpacity(double opacity) => withOpacity(this.opacity * opacity);
 }

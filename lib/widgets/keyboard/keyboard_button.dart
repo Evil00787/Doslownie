@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/grid/grid_cubit.dart';
 import '../../models/grid.dart';
 import '../../utils/theme.dart';
+import '../animation/animated_value.dart';
 
 class KeyboardButton extends StatelessWidget {
   final Tile tile;
   final Duration animationTime;
-  Color? _currentColor;
 
   bool get isConfirm => tile.letter == "✔";
   bool get isBackspace => tile.letter == "⌫";
@@ -53,21 +53,15 @@ class KeyboardButton extends StatelessWidget {
       ? Theme.of(context).colorScheme.primary
       : isBackspace
           ? Theme.of(context).colorScheme.secondary
-          : tile.state.color(context);
+          : tile.status.color(context);
 
   Widget _buildButton(BuildContext context) {
     var newColor = _buttonColor(context);
-    _currentColor ??= newColor;
 
-    return TweenAnimationBuilder<Color?>(
-      tween: ColorTween(
-        begin: _currentColor!,
-        end: newColor,
-      ),
-      curve: Curves.easeInOut,
-      onEnd: () => _currentColor = newColor,
+    return AnimatedValue<Color>(
+      value: newColor,
       duration: animationTime,
-      builder: (context, value, child) => ElevatedButton(
+      builder: (value) => ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: value,
           padding: EdgeInsets.zero,
@@ -103,7 +97,7 @@ class KeyboardButton extends StatelessWidget {
       var colors = Theme.of(context).colorScheme;
       return Icon(
         isConfirm ? Icons.check_rounded : Icons.backspace_rounded,
-        size: 30,
+        size: 25,
         color: isConfirm ? colors.onPrimary : colors.onSecondary,
       );
     }
@@ -111,7 +105,7 @@ class KeyboardButton extends StatelessWidget {
       tile.letter,
       style: TextStyle(
         fontSize: 25,
-        color: tile.state.onColor(context),
+        color: tile.status.onColor(context),
       ),
       textAlign: TextAlign.center,
     );
