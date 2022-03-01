@@ -32,7 +32,8 @@ class KeyboardCubit extends Cubit<KeyboardState> {
       var tileIndex = state.tileRows[rowIndex].indexWhere(
         (element) => element.letter == tile.letter,
       );
-      if (state.tileRows[rowIndex][tileIndex].state != TileState.correct) {
+      if (newTiles[rowIndex][tileIndex].state != TileState.correct
+      && !(newTiles[rowIndex][tileIndex].state == TileState.moved && tile.state == TileState.incorrect) ) {
         newTiles[rowIndex][tileIndex] = tile;
       }
     }
