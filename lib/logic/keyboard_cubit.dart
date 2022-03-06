@@ -26,15 +26,15 @@ class KeyboardCubit extends Cubit<KeyboardState> {
     var locale = _configCubit.state.locale;
     var newTiles = _tileRows(locale, state.tileRows);
     for (var tile in tiles) {
-      var rowIndex = _letters(locale).indexWhere(
+      var row = _letters(locale).indexWhere(
         (element) => element.contains(tile.letter),
       );
-      var tileIndex = state.tileRows[rowIndex].indexWhere(
+      var index = state.tileRows[row].indexWhere(
         (element) => element.letter == tile.letter,
       );
-      if (newTiles[rowIndex][tileIndex].state != TileState.correct
-      && !(newTiles[rowIndex][tileIndex].state == TileState.moved && tile.state == TileState.incorrect) ) {
-        newTiles[rowIndex][tileIndex] = tile;
+      var tileState = newTiles[row][index].state;
+      if (tile.state.rank > tileState.rank) {
+        newTiles[row][index] = tile;
       }
     }
     emit(KeyboardState(newTiles));

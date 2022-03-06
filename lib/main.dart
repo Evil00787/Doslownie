@@ -1,8 +1,8 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
 
 import 'logic/game_config_cubit.dart';
@@ -35,21 +35,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> implements CurrentLocaleObserver {
   @override
   Widget build(BuildContext context) {
-    return DynamicColorBuilder(
-      builder: (ColorScheme? light, ColorScheme? dark) => MaterialApp(
-        title: 'Dosłownie',
-        theme: CustomTheme(context).getLightTheme(light),
-        darkTheme: CustomTheme(context).getDarkTheme(dark),
-        themeMode: ThemeMode.dark,
-        localizationsDelegates: const [
-          AppLocales.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalesDelegate.supportedLocales,
-        initialRoute: 'menu',
-        routes: _createRoutes(),
+    return Sizer(
+      builder: (context, orientation, deviceType) => DynamicColorBuilder(
+        builder: (ColorScheme? light, ColorScheme? dark) => MaterialApp(
+          title: 'Dosłownie',
+          theme: CustomTheme(context).getLightTheme(light),
+          darkTheme: CustomTheme(context).getDarkTheme(dark),
+          themeMode: ThemeMode.dark,
+          localizationsDelegates: const [
+            AppLocales.delegate,
+          ],
+          supportedLocales: AppLocalesDelegate.supportedLocales,
+          initialRoute: 'menu',
+          routes: _createRoutes(),
+        ),
       ),
     );
   }

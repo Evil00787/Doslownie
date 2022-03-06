@@ -4,6 +4,13 @@ enum TileState { incorrect, moved, correct, unknown, active, locked }
 
 extension TileGroups on TileState {
   bool get uncovered => [TileState.incorrect, TileState.moved, TileState.correct].contains(this);
+
+  int get rank {
+    if (this == TileState.incorrect) return 1;
+    if (this == TileState.moved) return 2;
+    if (this == TileState.correct) return 3;
+    return 0;
+  }
 }
 
 class Tile extends Equatable {

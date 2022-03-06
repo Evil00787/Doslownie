@@ -62,7 +62,7 @@ class CustomTheme {
 extension TileColor on TileState {
   Color color(context) => {
         TileState.incorrect: Theme.of(context).colorScheme.surfaceVariant.withAlpha(120),
-        TileState.moved: Colors.yellow
+        TileState.moved: Colors.purple
             .harmonizeWith(Theme.of(context).colorScheme.primary)
             .withAlpha(160),
         TileState.correct: Colors.green
