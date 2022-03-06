@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../services/app_locales.dart';
@@ -22,20 +25,23 @@ class _MenuPageState extends State<MenuPage> {
         children: [
           CustomAppBar(),
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 300, maxHeight: 300),
-            child: SvgPicture.asset(
-              "assets/icons/icon.svg",
-              color: scheme.primary,
+            constraints: BoxConstraints(maxHeight: 200),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: SvgPicture.asset(
+                  "assets/icons/icon.svg",
+                  color: scheme.primary,
+                ),
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(child: GameConfigCard()),
-              ),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: EdgeInsets.all(2 + 5.w),
+              child: Center(child: GameConfigCard()),
             ),
           ),
           _buildButton(context),
@@ -48,10 +54,10 @@ class _MenuPageState extends State<MenuPage> {
     return ElevatedButton(
       onPressed: () => Navigator.pushNamed(context, 'game'),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(5 + 1.h),
         child: Text(
           AppLocales.I('start').toUpperCase(),
-          style: TextStyle(fontSize: 36),
+          style: TextStyle(fontSize: 12 + 8.sp),
         ),
       ),
     );

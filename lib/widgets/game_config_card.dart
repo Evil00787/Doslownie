@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../logic/game_config_cubit.dart';
@@ -18,7 +19,7 @@ class GameConfigCard extends StatelessWidget {
       ),
       color: Theme.of(context).colorScheme.background,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(6 + 2.w),
         child: BlocBuilder<GameConfigCubit, GameConfigState>(
           builder: (_, state) => Column(
             children: [
@@ -58,7 +59,7 @@ class GameConfigCard extends StatelessWidget {
         child: Text(
           AppLocales.I(title),
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 14 + 4.sp,
             color: scheme.onBackground,
           ),
         ),
@@ -79,11 +80,11 @@ class GameConfigCard extends StatelessWidget {
 
   Widget _getSegmentedText(int number, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(1.w),
       child: Text(
         number.toString(),
         style: TextStyle(
-          fontSize: 24,
+          fontSize: 16 + 4.sp,
           color: Theme.of(context).colorScheme.onPrimaryContainer,
         ),
       ),
