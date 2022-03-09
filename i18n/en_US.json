@@ -15,5 +15,6 @@
     "length": "Word length",
     "chances": "Number of chances"
   },
-  "whats_that": "What's that?"
+  "whats_that": "What's that?",
+  "dict_url": "https://en.wikipedia.org/wiki/"
 }

@@ -79,7 +79,7 @@ class EndGameDialog extends StatelessWidget {
         ),
         Center(
           child: MainActionButton(AppLocales.I('whats_that').toUpperCase(), () async {
-            if (!await launch("https://$languageString.wikipedia.org/wiki/${Uri.encodeFull(hiddenWord[0].toUpperCase() + (hiddenWord.length > 1 ? hiddenWord.substring(1).toLowerCase() : ""))}")) {
+            if (!await launch(AppLocales.I('dict_url') + Uri.encodeFull(hiddenWord[0].toUpperCase() + (hiddenWord.length > 1 ? hiddenWord.substring(1).toLowerCase() : "")))) {
               throw 'Could not launch';
             }
           }),
