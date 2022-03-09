@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../services/app_locales.dart';
@@ -21,19 +24,24 @@ class _MenuPageState extends State<MenuPage> {
       body: Column(
         children: [
           CustomAppBar(),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(child: GameConfigCard()),
-                  ),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: 200),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: SvgPicture.asset(
+                  "assets/icons/icon.svg",
+                  color: scheme.primary,
                 ),
               ),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: EdgeInsets.all(2 + 5.w),
+              child: Center(child: GameConfigCard()),
             ),
           ),
           _buildButton(context),
@@ -42,17 +50,14 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  Widget _buildButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: ElevatedButton(
-        onPressed: () => Navigator.pushNamed(context, 'game'),
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Text(
-            AppLocales.I('start').toUpperCase(),
-            style: TextStyle(fontSize: 36),
-          ),
+  ElevatedButton _buildButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => Navigator.pushNamed(context, 'game'),
+      child: Padding(
+        padding: EdgeInsets.all(5 + 1.h),
+        child: Text(
+          AppLocales.I('start').toUpperCase(),
+          style: TextStyle(fontSize: 12 + 8.sp),
         ),
       ),
     );
