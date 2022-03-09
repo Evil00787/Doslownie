@@ -21,20 +21,18 @@ class _MenuPageState extends State<MenuPage> {
       body: Column(
         children: [
           CustomAppBar(),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 300, maxHeight: 300),
-            child: SvgPicture.asset(
-              "assets/icons/icon.svg",
-              color: scheme.primary,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: SizedBox(
-              width: double.infinity,
+          Expanded(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(child: GameConfigCard()),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Center(child: GameConfigCard()),
+                  ),
+                ),
               ),
             ),
           ),
@@ -44,14 +42,17 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  ElevatedButton _buildButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => Navigator.pushNamed(context, 'game'),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Text(
-          AppLocales.I('start').toUpperCase(),
-          style: TextStyle(fontSize: 36),
+  Widget _buildButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: ElevatedButton(
+        onPressed: () => Navigator.pushNamed(context, 'game'),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Text(
+            AppLocales.I('start').toUpperCase(),
+            style: TextStyle(fontSize: 36),
+          ),
         ),
       ),
     );

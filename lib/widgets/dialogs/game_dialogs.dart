@@ -40,8 +40,9 @@ class GameDialogs extends StatelessWidget {
     GameState state, {
     bool noDelay = false,
   }) {
-    var cubit = context.read<GridCubit>();
-    var wordLength = context.read<GameConfigCubit>().state.dimensions.x;
+    var gameConfigCubit = context.read<GameConfigCubit>();
+    var gridCubit = context.read<GridCubit>();
+    var wordLength = gameConfigCubit.state.dimensions.x;
     var delay = GameGrid.tileDelay(wordLength) + GameGrid.tileAnimation;
     Future.delayed(noDelay ? Duration() : delay).then(
       (value) => showGeneralDialog(
@@ -49,9 +50,10 @@ class GameDialogs extends StatelessWidget {
         barrierDismissible: false,
         transitionDuration: Duration(milliseconds: 400),
         pageBuilder: (context, _, __) => EndGameDialog(
+          languageString: gameConfigCubit.state.locale.languageCode,
           gameState: state,
-          startNewGame: () => cubit.restartGame(),
-          hiddenWord: cubit.word,
+          startNewGame: () => gridCubit.restartGame(),
+          hiddenWord: gridCubit.word,
         ),
       ),
     );

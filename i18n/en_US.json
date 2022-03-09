@@ -14,5 +14,6 @@
   "settings": {
     "length": "Word length",
     "chances": "Number of chances"
-  }
+  },
+  "whats_that": "What's that?"
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/game_state.dart';
 import '../../models/grid.dart';
@@ -10,9 +11,11 @@ class EndGameDialog extends StatelessWidget {
   final GameState gameState;
   final void Function() startNewGame;
   final String hiddenWord;
+  final String languageString;
 
   const EndGameDialog({
     Key? key,
+    required this.languageString,
     required this.gameState,
     required this.startNewGame,
     required this.hiddenWord,
@@ -72,6 +75,13 @@ class EndGameDialog extends StatelessWidget {
           child: MainActionButton(AppLocales.I('game.new').toUpperCase(), () {
             startNewGame();
             Navigator.of(context).pop();
+          }),
+        ),
+        Center(
+          child: MainActionButton(AppLocales.I('whats_that').toUpperCase(), () async {
+            if (!await launch("https://$languageString.wikipedia.org/wiki/${Uri.encodeFull(hiddenWord[0].toUpperCase() + (hiddenWord.length > 1 ? hiddenWord.substring(1).toLowerCase() : ""))}")) {
+              throw 'Could not launch';
+            }
           }),
         ),
         Padding(
