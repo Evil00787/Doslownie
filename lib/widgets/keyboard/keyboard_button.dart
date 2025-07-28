@@ -69,7 +69,7 @@ class KeyboardButton extends StatelessWidget {
       duration: animationTime,
       builder: (context, value, child) => ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: value,
+          backgroundColor: value,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
