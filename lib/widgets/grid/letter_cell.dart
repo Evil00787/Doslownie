@@ -49,6 +49,7 @@ class LetterCell extends StatelessWidget {
         child: Text(
           tile.letter,
           style: TextStyle(
+            fontFamily: "Coiny",
             fontSize: 25,
             color: tile.state.onColor(context),
             fontWeight: FontWeight.bold,

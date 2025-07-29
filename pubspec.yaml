@@ -25,8 +25,7 @@ dependencies:
   expand_tap_area: ^1.1.0
   flutter_svg: ^2.2.0
   sizer: ^3.0.5
-  flutter_launcher_icons:
-    git: https://github.com/dirkbo/flutter_launcher_icons.git
+  flutter_launcher_icons: ^0.14.4
   url_launcher: ^6.0.20
 
 dev_dependencies:
@@ -34,22 +33,36 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
-flutter_icons:
+flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  windows: true
-  web: true
-  macos: true
   image_path: "assets/icons/icon.png"
-  adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/icons/icon.png"
-  remove_alpha_ios: true
+  min_sdk_android: 22 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icons/icon.png"
+    background_color: "#db517c"
+    theme_color: "#6767df"
+  windows:
+    generate: true
+    image_path: "assets/icons/icon.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/icons/icon.png"
 
 flutter:
   uses-material-design: true
 
+  fonts:
+    - family: Coiny
+      fonts:
+        - asset: assets/fonts/Coiny-Regular.ttf
+
   assets:
-    - assets/icons/icon.svg
+    - assets/icons/Logotype.png
+    - assets/icons/icon.png
+    - assets/icons/full_logo.svg
     - i18n/en_US.json
     - i18n/pl_PL.json
     - assets/pl-PL_extended.db

@@ -31,7 +31,7 @@ class CustomTheme {
       );
     }
     return ThemeData(
-        fontFamily: "RobotoMono", useMaterial3: true, colorScheme: colorScheme);
+        fontFamily: "Coiny", useMaterial3: true, colorScheme: colorScheme);
   }
 
   ThemeData getDarkTheme(ColorScheme? darkDynamic) {
@@ -44,7 +44,7 @@ class CustomTheme {
         onPrimary: Colors.white60,
         secondary: Colors.blueGrey,
         onSecondary: Colors.white54,
-        surfaceVariant: Colors.grey[900],
+        surfaceContainerHighest: Colors.grey[900],
         surface: Colors.black26,
         onSurfaceVariant: Colors.white60,
         primaryContainer: Colors.indigoAccent.withAlpha(120),
@@ -54,7 +54,7 @@ class CustomTheme {
     return ThemeData(
       colorScheme: darkColorScheme,
       useMaterial3: true,
-      fontFamily: "RobotoMono",
+      fontFamily: "Coiny",
     );
   }
 }

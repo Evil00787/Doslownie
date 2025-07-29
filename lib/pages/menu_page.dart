@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/svg.dart';
@@ -31,7 +29,7 @@ class _MenuPageState extends State<MenuPage> {
               child: AspectRatio(
                 aspectRatio: 1,
                 child: SvgPicture.asset(
-                  "assets/icons/icon.svg",
+                  "assets/icons/Logotype.png",
                   color: scheme.primary,
                 ),
               ),
